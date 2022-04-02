@@ -1,0 +1,98 @@
+.form-group {
+  width: 100%;
+}
+.form-label {
+  margin-bottom: 10px;
+}
+.form-addfilm > div:first-child {
+  display: flex;
+  align-items: center;
+}
+.form-addfilm > div:first-child .form-group:first-child {
+  margin-right: 20px;
+}
+.form-addfilm > div:first-child .form-group:last-child {
+  margin-left: 20px;
+}
+.form-label {
+  display: block;
+  margin-bottom: 10px;
+  color: #000;
+}
+.frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.addfilm-actor .form-group:first-child {
+  margin-right: 20px;
+}
+.btn-addActor {
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.form-input {
+  width: 100%;
+  height: 45px;
+  margin-bottom: 16px;
+  padding-left: 10px;
+  font-size: 20px;
+  outline: none;
+  line-height: 50px;
+}
+.frame .form-group:nth-child(2) {
+  margin: 0 20px;
+}
+.btn-check {
+  display: flex;
+  align-items: center;
+}
+.modal-form-update .btn-check {
+  justify-content: flex-end;
+  margin-right: 50px;
+}
+.btn-check > p {
+  padding: 8px 20px;
+  background-color: #24a4d8;
+  display: inline-block;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+.btn-check > p:hover {
+  opacity: 0.9;
+}
+.form-input-area {
+  width: 100%;
+  height: 180px;
+  outline: none;
+  padding-left: 10px;
+  padding-top: 10px;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.overlay {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.modal-form-update .form-addfilm {
+  position: fixed;
+  top: 50%;
+  z-index: 999;
+  background-color: #fff;
+  padding: 20px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1200px;
+  border-radius: 8px;
+}
+.modal-form-update .form-input {
+  height: 40px;
+}
+.modal-form-update .delete-movie {
+  background-color: #dd2345;
+  margin-left: 20px;
+}

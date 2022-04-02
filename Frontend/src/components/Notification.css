@@ -1,0 +1,15 @@
+.notification {
+  max-width: 1200px;
+  width: 90%;
+  padding: 25px;
+  border: red 1px solid;
+  border-radius: 10px;
+  margin: 15px auto;
+  background: #fff;
+}
+.notification p {
+  color: black;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}

@@ -1,0 +1,19 @@
+.MoviePlay {
+  width: 1200px;
+  margin: 0 auto;
+}
+.MoviePlay h2 {
+  font-size: 1.25rem;
+  padding: 10px 0;
+  color: #a5cbef;
+  font-weight: 700;
+  background: linear-gradient(to right, #ff8a00, #ff2070);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  box-decoration-break: clone;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.MoviePlay .slick-next {
+  right: 4px;
+}

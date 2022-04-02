@@ -1,0 +1,40 @@
+.overlay {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.showticket {
+  width: 1200px;
+  position: fixed;
+  z-index: 999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  height: 680px;
+  border-radius: 8px;
+  padding: 20px;
+}
+.showticket h3 {
+  margin-bottom: 10px;
+  color: #000;
+}
+.close-ticket {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.close-ticket > svg {
+  /* margin-right: 20px; */
+  color: #000;
+  border-radius: 50%;
+  background-color: #eaeaea;
+  width: 40px;
+  height: 40px;
+  padding: 6px;
+  cursor: pointer;
+}
+.close-ticket > svg:active {
+  background-color: #999;
+}

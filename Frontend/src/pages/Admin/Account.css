@@ -1,0 +1,81 @@
+.page-header {
+  margin-bottom: 40px;
+  text-transform: capitalize;
+}
+
+.page-card {
+  padding: 30px;
+  margin-bottom: 30px;
+  background-color: var(--main-bg);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
+}
+.row.heading {
+  justify-content: space-between;
+  align-items: center;
+}
+.addAdmin {
+  padding: 8px 14px;
+  background-color: #24a8d8;
+  color: #fff;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.addAdmin:hover {
+  background-color: #194567;
+}
+.search-id {
+  position: relative;
+  height: 50px;
+  background-color: var(--main-bg);
+  display: flex;
+  align-items: center;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: 20px;
+  margin-left: 15px;
+}
+.search-id > input {
+  height: 100%;
+  width: 200px;
+  padding: 10px 60px 10px 20px;
+  font-size: 1rem;
+  border-radius: var(--border-radius);
+  color: var(--txt-color);
+  background-color: var(--main-bg);
+}
+.search-id > i {
+  font-size: 1.5rem;
+  position: absolute;
+  right: 20px;
+  cursor: pointer;
+}
+.delete-admin {
+  padding: 8px 16px;
+  background-color: #ff0000d4;
+  color: #fff;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+.delete-admin:hover {
+  background-color: #aa0f0fe4;
+}
+.update,
+.delete-ticket {
+  padding: 8px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  color: #fff;
+  cursor: pointer;
+}
+.delete-ticket {
+  background-color: #dd2342;
+}
+.update {
+  background-color: #10a5a5;
+}
+.update:hover,
+.delete-ticket:hover {
+  opacity: 0.8;
+}

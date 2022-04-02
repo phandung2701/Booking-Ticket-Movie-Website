@@ -1,0 +1,58 @@
+.movieList {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  row-gap: 20px;
+}
+.allmovie {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.allmovie > h3 {
+  font-size: 1.25rem;
+  padding: 10px 0;
+  color: #a5cbef;
+  font-weight: 700;
+  background: linear-gradient(to right, #ff8a00, #ff2070);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  box-decoration-break: clone;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.table__pagination {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.table__pagination-item ~ .table__pagination-item {
+  margin-left: 10px;
+}
+
+.table__pagination-item {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.table__pagination-item.active,
+.table__pagination-item.active:hover {
+  background-color: #349eff;
+  color: #fff;
+  font-weight: 600;
+}
+
+.table__pagination-item:hover {
+  color: #000;
+  background-color: #ccc;
+}
+.movieList > p {
+  color: #fff;
+}

@@ -1,0 +1,21 @@
+.update,
+.delete-ticket,
+.show-ticket {
+  padding: 8px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  color: #fff;
+  cursor: pointer;
+}
+.delete-ticket {
+  background-color: #dd2342;
+}
+.show-ticket,
+.update {
+  background-color: #10a5a5;
+}
+.update:hover,
+.delete-ticket:hover,
+.show-ticket:hover {
+  opacity: 0.8;
+}

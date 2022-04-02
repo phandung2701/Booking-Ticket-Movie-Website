@@ -1,0 +1,32 @@
+.box-actor {
+  width: 1200px;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+.box-actor h2 {
+  color: #fff;
+  font-size: 24px;
+  margin-bottom: 30px;
+  margin-top: 40px;
+}
+.actor-all {
+  display: flex;
+  align-items: center;
+}
+.actor-item {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-right: 50px;
+}
+.actor-item img {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+.actor-item p {
+  color: #fff;
+  font-size: 14px;
+  margin-top: 20px;
+}

@@ -1,0 +1,72 @@
+.screen h2 {
+  color: #fff;
+  text-align: center;
+  margin: 10px 0 30px;
+}
+.screen {
+  width: 800px;
+  border: 1px solid #515151;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.table-seat {
+  background: linear-gradient(to right, #2b343c, #372d36);
+  color: #fff;
+  /* margin: 0; */
+  padding: 10px 0 10px 0;
+}
+.table-seat td {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+}
+.table-seat tbody {
+  padding: 0;
+  margin: 0;
+}
+.table-seat td > p {
+  width: 40px;
+  height: 40px;
+  background-color: #000;
+  text-align: center;
+  border-radius: 4px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+.table-seat td > p:hover {
+  opacity: 0.9;
+}
+.table-seat td > p::before {
+  content: '';
+  width: 10px;
+  height: 40px;
+  background-color: transparent;
+  left: -10px;
+  position: absolute;
+}
+.table-seat tr:hover {
+  background-color: rgba(43, 52, 60, 0.8);
+}
+.table-seat td > p::after {
+  content: '';
+  width: 40px;
+  height: 10px;
+  background-color: transparent;
+  top: -10px;
+  position: absolute;
+}
+.table-seat tr > td:first-child > p {
+  cursor: pointer;
+}
+.table-seat .selected {
+  background-color: #24a8d4;
+}
+.table-seat .disable {
+  background-color: red;
+  cursor: no-drop;
+  opacity: 0.8;
+}

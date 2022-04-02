@@ -1,0 +1,66 @@
+.form-group {
+  width: 100%;
+}
+.form-label {
+  margin-bottom: 10px;
+}
+.form-addfilm > div:first-child {
+  display: flex;
+  align-items: center;
+}
+.form-addfilm > div:first-child .form-group:first-child {
+  margin-right: 20px;
+}
+.form-addfilm > div:first-child .form-group:last-child {
+  margin-left: 20px;
+}
+.form-label {
+  display: block;
+  margin-bottom: 10px;
+  color: #000;
+}
+.frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.addfilm-actor .form-group:first-child {
+  margin-right: 20px;
+}
+.btn-addActor {
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.form-input {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 16px;
+  padding-left: 10px;
+  font-size: 20px;
+  outline: none;
+  line-height: 50px;
+}
+.frame .form-group:nth-child(2) {
+  margin: 0 20px;
+}
+.btn-check {
+  display: flex;
+  align-items: center;
+}
+.btn-check > p {
+  padding: 8px 20px;
+  background-color: #24a4d8;
+  display: inline-block;
+  border-radius: 8px;
+  color: #fff;
+}
+.form-input-area {
+  width: 100%;
+  height: 180px;
+  outline: none;
+  padding-left: 10px;
+  padding-top: 10px;
+  font-size: 20px;
+  margin-bottom: 20px;
+}

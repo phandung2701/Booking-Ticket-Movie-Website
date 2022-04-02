@@ -1,0 +1,81 @@
+.Cart-container {
+  width: 1200px;
+  margin: 0 auto;
+  background: #181818;
+  min-height: 600px;
+
+  padding-top: 60px;
+}
+.Cart {
+  padding: 30px;
+  border-radius: 5px;
+  border: 1px solid #515151;
+}
+.Cart-container > h3 {
+  font-size: 1.25rem;
+  padding: 10px 0;
+  color: #a5cbef;
+  font-weight: 700;
+  background: linear-gradient(to right, #ff8a00, #ff2070);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  box-decoration-break: clone;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.ticket-item {
+  width: 100%;
+}
+.ticket-item > div {
+  display: flex;
+}
+.ticket-item > div > p {
+  margin-bottom: 5px;
+  margin-right: 20px;
+  color: #aaaaaa;
+}
+.ticket-item > div > p > span {
+  color: #fff;
+}
+.ticket-item .wait {
+  color: red;
+  font-style: italic;
+}
+.cancel-btn {
+  border: none;
+  padding: 8px 30px;
+  margin: 10px 0;
+  background: white;
+  color: red;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.ticket-item .success {
+  color: #24a4d8;
+}
+.box-ticket > img {
+  width: 120px;
+  height: 100%;
+  margin-right: 20px;
+  margin-top: 8px;
+}
+.box-ticket {
+  display: flex;
+  border: 1px solid #515151;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+.NoTicket {
+  color: #fff;
+  margin-right: 10px;
+}
+.tickets-booked {
+  display: flex;
+  align-items: center;
+}
+.tickets-booked > a {
+  color: #24a4d8;
+  text-decoration: underline;
+}
