@@ -1,18 +1,19 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const CinemaSchema = new mongoose.Schema(
   {
     name: {
-      type: String
+      type: String,
     },
     address: {
-      type: String
+      type: String,
     },
-    province: {
-      type: String
-    }
+    provinceId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Province",
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Cinema', CinemaSchema);
+module.exports = mongoose.model("Cinema", CinemaSchema);

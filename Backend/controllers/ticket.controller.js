@@ -1,9 +1,9 @@
-const asyncHandler = require('../helpers/async');
-const ErrorResponse = require('../utils/errorResponse');
-const Ticket = require('../models/Ticket.model');
-const Movie = require('../models/Movie.model');
-const Cinema = require('../models/Cinema.model');
-const User = require('../models/User.model');
+const asyncHandler = require("../helpers/async");
+const ErrorResponse = require("../utils/errorResponse");
+const Ticket = require("../models/Ticket.model");
+const Movie = require("../models/Movie.model");
+const Cinema = require("../models/Cinema.model");
+const User = require("../models/Customer.model");
 
 /**
  * @description Đặt vé xem phim
@@ -19,7 +19,7 @@ exports.create = asyncHandler(async (req, res, next) => {
 
   if (!movie || !cinema) {
     return next(
-      new ErrorResponse('Thông tin chưa đầy đủ hãy kiểm tra lại', 400)
+      new ErrorResponse("Thông tin chưa đầy đủ hãy kiểm tra lại", 400)
     );
   }
 
@@ -29,11 +29,11 @@ exports.create = asyncHandler(async (req, res, next) => {
     showTime,
     seat,
   })
-    .where('status')
-    .in(['booked']);
+    .where("status")
+    .in(["booked"]);
 
   if (findTicket.length) {
-    return next(new ErrorResponse('Chỗ ngồi đã có người đặt', 400));
+    return next(new ErrorResponse("Chỗ ngồi đã có người đặt", 400));
   }
   for (let i = 0; i < seat.length; i++) {
     Ticket.create({
@@ -79,11 +79,11 @@ exports.create = asyncHandler(async (req, res, next) => {
  */
 exports.all = asyncHandler(async (req, res, next) => {
   const ticket = await Ticket.find({ userId: req.user.id })
-    .populate([{ path: 'filmId' }, { path: 'cinemaId' }])
+    .populate([{ path: "filmId" }, { path: "cinemaId" }])
     .exec();
 
   if (!ticket) {
-    return next(ErrorResponse('Không tìm thấy thông tin', 404));
+    return next(ErrorResponse("Không tìm thấy thông tin", 404));
   }
 
   res.status(200).json({
@@ -101,7 +101,7 @@ exports.showForAdmin = asyncHandler(async (req, res, next) => {
   const ticket = await Ticket.find()
 
     .sort({ updatedAt: -1 })
-    .populate([{ path: 'filmId' }, { path: 'cinemaId' }, { path: 'userId' }])
+    .populate([{ path: "filmId" }, { path: "cinemaId" }, { path: "userId" }])
     .exec();
 
   return res.status(200).json({
@@ -119,8 +119,8 @@ exports.status = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const status = req.body.status;
 
-  if (!status | !['booked', 'cancelled'].includes(status)) {
-    return next(new ErrorResponse('Trạng thái vé không hợp lệ', 400));
+  if (!status | !["booked", "cancelled"].includes(status)) {
+    return next(new ErrorResponse("Trạng thái vé không hợp lệ", 400));
   }
 
   const ticket = await Ticket.findByIdAndUpdate(
@@ -151,8 +151,8 @@ exports.statusForAdmin = asyncHandler(async (req, res, next) => {
   const fid = req.params.fid;
   const status = req.body.status;
 
-  if (!status | !['booked', 'cancelled'].includes(status)) {
-    return next(new ErrorResponse('Trạng thái vé không hợp lệ', 400));
+  if (!status | !["booked", "cancelled"].includes(status)) {
+    return next(new ErrorResponse("Trạng thái vé không hợp lệ", 400));
   }
 
   const ticket = await Ticket.findOneAndUpdate(
@@ -168,7 +168,7 @@ exports.statusForAdmin = asyncHandler(async (req, res, next) => {
     return res.status(400).json({ success: true });
   }
 
-  if (status === 'cancelled') {
+  if (status === "cancelled") {
     const listTicket = await Ticket.find({ filmId: fid }).select({
       userId: 1,
       _id: 0,
@@ -182,19 +182,19 @@ exports.statusForAdmin = asyncHandler(async (req, res, next) => {
     const d = new Date();
     const dateFormat =
       [
-        (d.getMonth() + 1).toString().padStart(2, '0'),
-        d.getDate().toString().padStart(2, '0'),
+        (d.getMonth() + 1).toString().padStart(2, "0"),
+        d.getDate().toString().padStart(2, "0"),
         d.getFullYear(),
-      ].join('/') +
-      ' ' +
+      ].join("/") +
+      " " +
       [
-        d.getHours().toString().padStart(2, '0'),
-        d.getMinutes().toString().padStart(2, '0'),
-        d.getSeconds().toString().padStart(2, '0'),
-      ].join(':');
+        d.getHours().toString().padStart(2, "0"),
+        d.getMinutes().toString().padStart(2, "0"),
+        d.getSeconds().toString().padStart(2, "0"),
+      ].join(":");
 
     const message = {
-      content: `Vé của phim "${movie['nameFilm']}" đã bị quản trị viên hủy vì sự cố. Chúng tôi sẽ thực hiện chính sách hoàn tiền trong 3 ngày kể từ hôm nay. Chúng tôi thành thực xin lỗi vì sự bất tiện này!`,
+      content: `Vé của phim "${movie["nameFilm"]}" đã bị quản trị viên hủy vì sự cố. Chúng tôi sẽ thực hiện chính sách hoàn tiền trong 3 ngày kể từ hôm nay. Chúng tôi thành thực xin lỗi vì sự bất tiện này!`,
       time: dateFormat,
     };
 
