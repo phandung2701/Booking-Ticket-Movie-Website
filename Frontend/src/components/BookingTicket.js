@@ -1,11 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Screen from './Screen';
-import BoxPayment from '../components/BoxPayment';
-import './BookingTicket.css';
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Screen from "./Screen";
+import BoxPayment from "../components/BoxPayment";
+import "./BookingTicket.css";
 
-import { AuthContext } from '../shared/context/auth-context';
-import axios from 'axios';
+import { AuthContext } from "../shared/context/auth-context";
+import axios from "axios";
+import Snacks from "./Snacks";
+import { numberToString } from "../utils";
 
 function BookingTicket({
   movie,
@@ -27,17 +29,19 @@ function BookingTicket({
   const [cinema, setCinema] = useState([]);
   const [chooseTime, setChooseTime] = useState({
     idCinema: movie._id,
-    cinemaName: '',
-    cinemaAddress: '',
-    time: '',
+    cinemaName: "",
+    cinemaAddress: "",
+    time: "",
   });
+
+  const [selectedSnacks, setSelectedSnacks] = useState([]);
 
   useEffect(() => {
     const fetchCinema = () => {
       axios({
-        method: 'get',
+        method: "get",
         baseURL: process.env.REACT_APP_BACKEND_URL,
-        url: '/v1/cinema',
+        url: "/v1/cinema",
       })
         .then((res) => {
           setCinema(res.data.cinema);
@@ -60,10 +64,10 @@ function BookingTicket({
     setStatus([]);
     setBookingNum(0);
     axios({
-      method: 'get',
+      method: "get",
       baseURL: process.env.REACT_APP_BACKEND_URL,
       url: `/v1/seat?fid=${movie._id}&cid=${chooseTime.idCinema}&st=${
-        chooseTime.time.substr(0, 2) + '00'
+        chooseTime.time.substr(0, 2) + "00"
       }`,
       headers: {
         Authorization: `Bearer ${auth.token}`,
@@ -99,7 +103,7 @@ function BookingTicket({
   const bookingHandler = () => {
     setIsLoading(true);
     axios({
-      method: 'post',
+      method: "post",
       baseURL: process.env.REACT_APP_BACKEND_URL,
       url: `/v1/ticket`,
       headers: {
@@ -110,13 +114,13 @@ function BookingTicket({
         cinemaId: chooseTime.idCinema,
         showTime: chooseTime.time.substr(0, 5),
         seat: status,
-        room: 'P1',
+        room: "P1",
         price: 50000 * bookingNum,
       },
     })
       .then((res) => {
         setIsLoading(false);
-        navigate('/library');
+        navigate("/library");
       })
       .catch((err) => {
         setIsLoading(false);
@@ -125,11 +129,11 @@ function BookingTicket({
   };
   const showPayment = () => {
     if (
-      chooseTime.idCinema === '' ||
-      chooseTime.time === '' ||
+      chooseTime.idCinema === "" ||
+      chooseTime.time === "" ||
       status.length === 0
     ) {
-      setError('Oops... Có vẻ bạn thiếu thông tin nào đó');
+      setError("Oops... Có vẻ bạn thiếu thông tin nào đó");
       return;
     }
     setPaymentIsShown(true);
@@ -148,16 +152,16 @@ function BookingTicket({
         paymentInfo={paymentInfo}
         bookingHandler={bookingHandler}
       />
-      <div className='Booking-container'>
-        <div className='movie-booking'>
+      <div className="Booking-container">
+        <div className="movie-booking">
           <p>{movie.nameFilm}</p>
           <p>
-            Khởi chiếu :{' '}
-            {new Date(movie.movieDay).toLocaleString().split(',')[0]}
+            Khởi chiếu :{" "}
+            {new Date(movie.movieDay).toLocaleString().split(",")[0]}
           </p>
         </div>
         <h2>Đặt vé xem phim</h2>
-        <div className='booking-ticket'>
+        <div className="booking-ticket">
           {/* <div className='choose-province'>
             <h3>Chọn tỉnh</h3>
             <input
@@ -235,24 +239,24 @@ function BookingTicket({
             </div>
           </div> */}
           <h3>Chọn rạp</h3>
-          <div className='choose-time-seat'>
-            <div className='address-cinema'>
+          <div className="choose-time-seat">
+            <div className="address-cinema">
               {cinema.map((item, index) => {
                 return (
-                  <div className='address-cinema-item' key={item.id}>
-                    <div className='header'>
+                  <div className="address-cinema-item" key={item.id}>
+                    <div className="header">
                       <h3>{item.name}</h3>
                       <p>{item.address}</p>
                     </div>
-                    <div className='showtime-content'>
+                    <div className="showtime-content">
                       {item.showTime.map((time, i) => (
                         <p
                           key={i}
                           className={
                             (chooseTime.idCinema === item._id) &
                             (time === chooseTime.time)
-                              ? 'time-active'
-                              : ''
+                              ? "time-active"
+                              : ""
                           }
                           id={item._id}
                           onClick={onGetShowTime}
@@ -273,16 +277,30 @@ function BookingTicket({
               setBookingNum={setBookingNum}
             ></Screen>
           </div>
-          <div className='payment'>
-            <div className='payment-info'>
+          <Snacks
+            isActive={isTouched}
+            selectedSnacks={selectedSnacks}
+            setSelectedSnacks={setSelectedSnacks}
+          />
+          <div className="payment">
+            <div className="payment-info">
               <p>
                 Số lượng vé: <span>{bookingNum}</span>
               </p>
               <p>
-                Thành tiền: <span>{bookingNum * 50000} VND</span>
+                Thành tiền:{" "}
+                <span>
+                  {numberToString(
+                    bookingNum * 50000 +
+                      selectedSnacks.reduce((accumulatedPrice, snack) => {
+                        return accumulatedPrice + snack.price * snack.count;
+                      }, 0)
+                  )}{" "}
+                  VND
+                </span>
               </p>
             </div>
-            <div className='payment-btn'>
+            <div className="payment-btn">
               <p onClick={() => navigate(-1)}>Hủy</p>
               <p onClick={showPayment}>Đặt vé</p>
             </div>
