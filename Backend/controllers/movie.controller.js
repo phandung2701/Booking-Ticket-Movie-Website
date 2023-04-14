@@ -1,7 +1,7 @@
-const asyncHandler = require('../helpers/async');
-const Movie = require('../models/Movie.model');
-const Cinema = require('../models/Cinema.model');
-const ErrorResponse = require('../utils/errorResponse');
+const asyncHandler = require("../helpers/async");
+const Movie = require("../models/Movie.model");
+const Cinema = require("../models/Cinema.model");
+const ErrorResponse = require("../utils/errorResponse");
 
 /**
  * @description Xem tất cả các bộ phim có trên website
@@ -27,21 +27,21 @@ exports.searchName = asyncHandler(async (req, res) => {
   function to_slug(str) {
     str = str.toLowerCase();
 
-    str = str.replace(/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/g, 'a');
-    str = str.replace(/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/g, 'e');
-    str = str.replace(/(ì|í|ị|ỉ|ĩ)/g, 'i');
-    str = str.replace(/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/g, 'o');
-    str = str.replace(/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/g, 'u');
-    str = str.replace(/(ỳ|ý|ỵ|ỷ|ỹ)/g, 'y');
-    str = str.replace(/(đ)/g, 'd');
+    str = str.replace(/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/g, "a");
+    str = str.replace(/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/g, "e");
+    str = str.replace(/(ì|í|ị|ỉ|ĩ)/g, "i");
+    str = str.replace(/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/g, "o");
+    str = str.replace(/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/g, "u");
+    str = str.replace(/(ỳ|ý|ỵ|ỷ|ỹ)/g, "y");
+    str = str.replace(/(đ)/g, "d");
 
-    str = str.replace(/([^0-9a-z-\s])/g, '');
+    str = str.replace(/([^0-9a-z-\s])/g, "");
 
-    str = str.replace(/(\s+)/g, '-');
+    str = str.replace(/(\s+)/g, "-");
 
-    str = str.replace(/^-+/g, '');
+    str = str.replace(/^-+/g, "");
 
-    str = str.replace(/-+$/g, '');
+    str = str.replace(/-+$/g, "");
 
     return str;
   }
@@ -62,43 +62,43 @@ exports.search = asyncHandler(async (req, res, next) => {
   function to_slug(str) {
     str = str.toLowerCase();
 
-    str = str.replace(/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/g, 'a');
-    str = str.replace(/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/g, 'e');
-    str = str.replace(/(ì|í|ị|ỉ|ĩ)/g, 'i');
-    str = str.replace(/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/g, 'o');
-    str = str.replace(/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/g, 'u');
-    str = str.replace(/(ỳ|ý|ỵ|ỷ|ỹ)/g, 'y');
-    str = str.replace(/(đ)/g, 'd');
+    str = str.replace(/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/g, "a");
+    str = str.replace(/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/g, "e");
+    str = str.replace(/(ì|í|ị|ỉ|ĩ)/g, "i");
+    str = str.replace(/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/g, "o");
+    str = str.replace(/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/g, "u");
+    str = str.replace(/(ỳ|ý|ỵ|ỷ|ỹ)/g, "y");
+    str = str.replace(/(đ)/g, "d");
 
-    str = str.replace(/([^0-9a-z-\s])/g, '');
+    str = str.replace(/([^0-9a-z-\s])/g, "");
 
-    str = str.replace(/(\s+)/g, '-');
+    str = str.replace(/(\s+)/g, "-");
 
-    str = str.replace(/^-+/g, '');
+    str = str.replace(/^-+/g, "");
 
-    str = str.replace(/-+$/g, '');
+    str = str.replace(/-+$/g, "");
 
     return str;
   }
   function resData(category, country, movie) {
-    if (category !== 'Tất cả' && country !== 'Tất cả') {
+    if (category !== "Tất cả" && country !== "Tất cả") {
       return movie.filter(
         (e) =>
           e.country.toLowerCase().includes(country.toLowerCase()) &&
           to_slug(e.category).includes(to_slug(category))
       );
     }
-    if (category !== 'Tất cả' && country === 'Tất cả') {
+    if (category !== "Tất cả" && country === "Tất cả") {
       return movie.filter((e) =>
         to_slug(e.category).includes(to_slug(category))
       );
     }
-    if (category === 'Tất cả' && country !== 'Tất cả') {
+    if (category === "Tất cả" && country !== "Tất cả") {
       return movie.filter((e) =>
         e.country.toLowerCase().includes(country.toLowerCase())
       );
     }
-    if (category === 'Tất cả' && country === 'Tất cả') {
+    if (category === "Tất cả" && country === "Tất cả") {
       return movie;
     }
   }
@@ -115,7 +115,7 @@ exports.search = asyncHandler(async (req, res, next) => {
  */
 exports.create = asyncHandler(async (req, res, next) => {
   const {
-    nameFilm,
+    name,
     description,
     director,
     country,
@@ -128,12 +128,12 @@ exports.create = asyncHandler(async (req, res, next) => {
   } = req.body;
 
   const movie = new Movie();
-  const cinema = await Cinema.find({}, ['_id']);
+  const cinema = await Cinema.find({}, ["_id"]);
   const listCinema = new Array(cinema.length);
 
-  for (let i = 0; i < listCinema.length; ++i) listCinema[i] = cinema[i]['_id'];
+  for (let i = 0; i < listCinema.length; ++i) listCinema[i] = cinema[i]["_id"];
   movie.cinema = listCinema;
-  movie.nameFilm = nameFilm;
+  movie.name = name;
   movie.description = description;
   movie.director = director;
   movie.country = country;
@@ -158,10 +158,10 @@ exports.create = asyncHandler(async (req, res, next) => {
  */
 exports.detail = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  const movie = await Movie.findById(id).select('-cinema');
+  const movie = await Movie.findById(id).select("-cinema");
 
   if (!movie) {
-    return next(new ErrorResponse('Không tìm thấy phim', 404));
+    return next(new ErrorResponse("Không tìm thấy phim", 404));
   }
 
   res.status(200).json({
