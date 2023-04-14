@@ -1,22 +1,22 @@
-const jwt = require('jsonwebtoken');
-const asyncHandler = require('../helpers/async');
-const User = require('../models/User.model');
-const ErrorResponse = require('../utils/errorResponse');
+const jwt = require("jsonwebtoken");
+const asyncHandler = require("../helpers/async");
+const User = require("../models/Customer.model");
+const ErrorResponse = require("../utils/errorResponse");
 
 exports.protect = asyncHandler(async (req, res, next) => {
   let token;
 
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
+    req.headers.authorization.startsWith("Bearer")
   ) {
-    token = req.headers.authorization.split(' ')[1];
+    token = req.headers.authorization.split(" ")[1];
   } else if (req.cookies.token) {
     token = req.cookies.token;
   }
 
   if (!token) {
-    return next(new ErrorResponse('Lỗi xác thực', 401));
+    return next(new ErrorResponse("Lỗi xác thực", 401));
   }
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -36,7 +36,7 @@ exports.hasAuthorization = (role) => {
 
     res.status(401).json({
       success: false,
-      message: 'Lỗi xác thực'
+      message: "Lỗi xác thực",
     });
   });
 };
