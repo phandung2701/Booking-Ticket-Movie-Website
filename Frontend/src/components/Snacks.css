@@ -1,0 +1,81 @@
+.snacks-wrapper {
+  border: 1px solid #2e333b;
+  margin-top: 3rem;
+  padding: 0.5rem 1rem;
+}
+
+.snacks-wrapper:hover {
+  cursor: pointer;
+}
+
+.snacks-wrapper .snacks-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.snacks-wrapper .snacks-header h2 {
+  color: white;
+}
+
+.snacks-wrapper ul {
+  margin: 0.5rem 0;
+}
+
+.snacks-wrapper ul li {
+  display: flex;
+  justify-content: flex-start;
+  border-top: 1px solid #2e333b;
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.snacks-wrapper ul li .image-frame {
+  width: 120px;
+  height: 150px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  margin-right: 1rem;
+}
+
+.snacks-wrapper ul li .image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.snacks-wrapper ul li .snack-info {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.snacks-wrapper ul li .snack-info p {
+  font-size: 0.8rem;
+}
+
+.snacks-wrapper ul li .snack-info div {
+  line-height: 0;
+}
+
+.snacks-wrapper ul li .snack-info div span {
+  margin: 0 1rem;
+}
+
+.snacks-wrapper ul li .snack-info div button {
+  padding: 0.25rem;
+  width: 30px;
+  height: 30px;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 0;
+}
+
+.snacks-wrapper ul li .snack-info div button:hover {
+  cursor: pointer;
+}
