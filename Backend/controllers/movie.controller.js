@@ -1,7 +1,11 @@
 const asyncHandler = require("../helpers/async");
 const Movie = require("../models/Movie.model");
-const Cinema = require("../models/Cinema.model");
 const ErrorResponse = require("../utils/errorResponse");
+const generateDigitCode = require("../helpers/generateDigitCode");
+const CinemaModel = require("../models/Cinema.model");
+const ShowTimeModel = require("../models/ShowTime.model");
+const ScreenModel = require("../models/Screen.model");
+const ProvinceModel = require("../models/Province.model");
 
 /**
  * @description Xem tất cả các bộ phim có trên website
@@ -58,7 +62,7 @@ exports.searchName = asyncHandler(async (req, res) => {
  */
 exports.search = asyncHandler(async (req, res, next) => {
   const movie = await Movie.find();
-  const { category, country } = req.body;
+  const { genre, country } = req.body;
   function to_slug(str) {
     str = str.toLowerCase();
 
@@ -80,29 +84,29 @@ exports.search = asyncHandler(async (req, res, next) => {
 
     return str;
   }
-  function resData(category, country, movie) {
-    if (category !== "Tất cả" && country !== "Tất cả") {
+  function resData(genre, country, movie) {
+    if (genre !== "Tất cả" && country !== "Tất cả") {
       return movie.filter(
         (e) =>
           e.country.toLowerCase().includes(country.toLowerCase()) &&
-          to_slug(e.category).includes(to_slug(category))
+          to_slug(e.genre).includes(to_slug(genre))
       );
     }
-    if (category !== "Tất cả" && country === "Tất cả") {
+    if (genre !== "Tất cả" && country === "Tất cả") {
       return movie.filter((e) =>
-        to_slug(e.category).includes(to_slug(category))
+        to_slug(e.genre).includes(to_slug(genre))
       );
     }
-    if (category === "Tất cả" && country !== "Tất cả") {
+    if (genre === "Tất cả" && country !== "Tất cả") {
       return movie.filter((e) =>
         e.country.toLowerCase().includes(country.toLowerCase())
       );
     }
-    if (category === "Tất cả" && country === "Tất cả") {
+    if (genre === "Tất cả" && country === "Tất cả") {
       return movie;
     }
   }
-  const movies = resData(category, country, movie);
+  const movies = resData(genre, country, movie);
   res.status(200).json({
     success: true,
     films: movies,
@@ -119,31 +123,27 @@ exports.create = asyncHandler(async (req, res, next) => {
     description,
     director,
     country,
-    category,
+    genre,
     actor,
-    movieDay,
+    releaseDate,
     background,
     avatar,
     trailer,
   } = req.body;
+  const movie = await Movie.create({
+    sid: generateDigitCode(),
+    name:name, 
+    description, 
+    director, 
+    country, 
+    genre:genre, 
+    actor, 
+    releaseDate, 
+    background, 
+    avatar, 
+    trailer, 
+  });
 
-  const movie = new Movie();
-  const cinema = await Cinema.find({}, ["_id"]);
-  const listCinema = new Array(cinema.length);
-
-  for (let i = 0; i < listCinema.length; ++i) listCinema[i] = cinema[i]["_id"];
-  movie.cinema = listCinema;
-  movie.name = name;
-  movie.description = description;
-  movie.director = director;
-  movie.country = country;
-  movie.category = category;
-  movie.actor = actor;
-  movie.movieDay = movieDay;
-  movie.background = background;
-  movie.avatar = avatar;
-  movie.trailer = trailer;
-  await movie.save();
 
   return res.status(201).json({
     success: true,
@@ -158,8 +158,12 @@ exports.create = asyncHandler(async (req, res, next) => {
  */
 exports.detail = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  const movie = await Movie.findById(id).select("-cinema");
-
+  let date = new Date()
+  const movie = await Movie.find({sid : id});
+  const cinema = await CinemaModel.find()
+  const showTime = await ShowTimeModel.find({movieId:id,movieDay : {$gt: date.toISOString()}})
+  const screen = await ScreenModel.find()
+  const province = await ProvinceModel.find()
   if (!movie) {
     return next(new ErrorResponse("Không tìm thấy phim", 404));
   }
@@ -167,6 +171,10 @@ exports.detail = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     movie,
+    cinema,
+    showTime,
+    screen,
+    province
   });
 });
 

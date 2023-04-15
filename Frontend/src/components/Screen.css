@@ -4,7 +4,7 @@
   margin: 10px 0 30px;
 }
 .screen {
-  width: 800px;
+  flex: 0.5;
   border: 1px solid #515151;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;

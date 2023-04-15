@@ -4,46 +4,47 @@ import { AuthContext } from '../../shared/context/auth-context';
 
 import LoadingSpinner from '../../shared/components/LoadingSpinner';
 import axios from 'axios';
-import UpdateMovie from '../../components/Admin/UpdateMovie';
 import './Movies.css';
-import ModalShowTicket from '../../components/Admin/ModalShowTicket';
-import ModalCancelTicket from '../../components/Admin/ModalCancelTicket';
-function Movies() {
+import UpdateShowTime from '../../components/Admin/UpdateShowTime';
+function ShowTime() {
   const auth = useContext(AuthContext);
-  const [movie, setMovie] = useState([]);
+  const instance = axios.create({
+    baseURL: process.env.REACT_APP_BACKEND_URL,
+    headers: {
+      Authorization: `Bearer ${auth.token}`,
+    },
+  })
+  const [showTime, setShowTime] = useState([]);
   const [flag, setFlag] = useState(false);
 
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [action,setAction] = useState('')
   const [showFormUpdate, setShowFormUpdate] = useState(false);
-  const [showTicket, setShowTicket] = useState(false);
-  const [showCancelTicket, setShowCancelTicket] = useState(false);
 
-  const [amovie, setAMovie] = useState({});
+  const [aShowTime, setAShowTime] = useState({});
   const customerTableHead = [
     'STT',
     'Sid',
-    'Movie name',
-    'Director',
-    'Actor',
-    'Genre',
-    'Country',
-    'Release date',
+    'MovieId',
+    'Movie Day',
+    'Time',
+    'ScreenId',
     'Action',
+    '',
   ];
   useEffect(() => {
     const fetchData = async () => {
       axios({
         method: 'get',
         baseURL: process.env.REACT_APP_BACKEND_URL,
-        url: '/v1/movie',
+        url: '/v1/showTime',
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
       })
         .then((res) => {
-          setMovie(res.data.films);
+          setShowTime(res.data.showTime);
           setFlag(true);
         })
         .catch((err) => setError(err.message));
@@ -56,13 +57,13 @@ function Movies() {
     axios({
       method: 'get',
       baseURL: process.env.REACT_APP_BACKEND_URL,
-      url: '/v1/movie',
+      url: '/v1/showTime',
       headers: {
         Authorization: `Bearer ${auth.token}`,
       },
     })
       .then((res) => {
-        setMovie(res.data.films);
+        setShowTime(res.data.showTime);
         setIsLoading(false);
         setFlag(true);
       })
@@ -75,94 +76,77 @@ function Movies() {
   const renderBody = (item, index) => (
     <tr key={item._id}>
       <td>{index + 1}</td>
-      <td>{item?.sid}</td>
-      <td>{item.name}</td>
-      <td>{item.director}</td>
-      <td>{item.actor}</td>
-      <td>{item.genre}</td>
-      <td>{item.country}</td>
-      <td>{item.releaseDate}</td>
+      <td>{item.sid}</td>
+      <td>{item.movieId}</td>
+      <td>{item.movieDay}</td>
+      <td>{item.time}</td>
+      <td>{item.screenId}</td>
 
       <td>
-        <span className='update' onClick={() => onUpdateMovie(item)}>
-          update
+        <span className='update' onClick={() => handleUpdateShowTime(item)}>
+          Update
+        </span>
+      </td>
+      <td>
+        <span className='delete-ticket' onClick={() => handleDeleteShowTime(item)}>
+          Delete
         </span>
       </td>
     </tr>
   );
   // function
-  const onUpdateMovie = (e) => {
-    setAMovie(e);
+  const handleUpdateShowTime = (e) => {
+    setAShowTime(e);
+    setAction('update')
     setShowFormUpdate(true);
   };
-  const onShowTicket = (e) => {
-    setAMovie(e);
-    setShowTicket(true);
-  };
-
-  const cancelAllTicket = (movieId) => {
-    setIsLoading(true);
-    axios({
-      method: 'put',
-      baseURL: process.env.REACT_APP_BACKEND_URL,
-      url: `/v1/ticket/film/${movieId}/status`,
-      headers: {
-        Authorization: `Bearer ${auth.token}`,
-      },
-      data: {
-        status: 'cancelled',
-      },
-    })
-      .then((res) => {
-        setIsLoading(false);
-        setShowCancelTicket(false);
-        triggerLoading();
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setError(err.response.data.error);
-      });
-  };
-  const onCancelTicket = (e) => {
-    setAMovie(e);
-    setShowCancelTicket(true);
-  };
-
+  const handleDeleteShowTime = async(e)=>{
+    try{
+      console.log(e)
+      if(window.confirm("Are you sure you want to delete showtime?") == true){
+        await instance.post('/v1/showTime/delete',{sid:e.sid})
+        triggerLoading()
+      }
+    }
+    catch(err){
+      setError(err.message);
+    }
+  }
+  const handleCreateShowTime = ()=>{
+    setAction('create')
+    setShowFormUpdate(true);
+  }
   return (
     <Fragment>
       {isLoading && <LoadingSpinner />}
 
       <div>
-        {movie.length > 0 && flag ? (
+      <div className='btn-check' style={{
+          marginBottom:'10px'
+        }}>
+            <p onClick={handleCreateShowTime}>Create</p>
+        </div>
+        {showTime.length > 0 && flag ? (
           <Table
             limit='5'
             headData={customerTableHead}
             renderHead={(item, index) => renderHead(item, index)}
             renderBody={(item, index) => renderBody(item, index)}
-            bodyData={movie}
+            bodyData={showTime}
           />
         ) : null}
         {showFormUpdate ? (
-          <UpdateMovie
-            movie={amovie}
+          <UpdateShowTime
+            showTime={aShowTime}
             setShowFormUpdate={setShowFormUpdate}
             triggerLoading={triggerLoading}
             setIsLoading={setIsLoading}
+            action = {action}
           />
         ) : null}
-        {showTicket ? (
-          <ModalShowTicket movie={amovie} setShowTicket={setShowTicket} />
-        ) : null}
-
-        <ModalCancelTicket
-          showCancelTicket={showCancelTicket}
-          setShowCancelTicket={setShowCancelTicket}
-          cancelAllTicket={cancelAllTicket}
-          movie={amovie}
-        />
       </div>
     </Fragment>
   );
 }
 
-export default Movies;
+export default ShowTime;

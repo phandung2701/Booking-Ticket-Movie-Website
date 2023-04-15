@@ -42,7 +42,7 @@ function AllMovie(props) {
           dataShow.map((movie, index) => (
             <CardFilm
               key={movie._id}
-              movieId={movie._id}
+              movieId={movie?.sid || ''}
               poster={movie.avatar}
               movieName={movie.nameFilm}
               category={movie.category}

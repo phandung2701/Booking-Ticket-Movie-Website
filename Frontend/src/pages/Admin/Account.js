@@ -38,7 +38,7 @@ function Account() {
   const renderBody = (item, index) => (
     <tr key={item._id}>
       <td>{index + 1}</td>
-      <td>{item.firstname + ' ' + item.lastname}</td>
+      <td>{item.name}</td>
       <td>{item.email}</td>
       <td>{item.role}</td>
 
@@ -48,13 +48,13 @@ function Account() {
             className='delete-ticket'
             onClick={() => handleUpdate(item, 'user')}
           >
-            Xóa Admin
+            Delete Admin
           </span>
         </td>
       ) : (
         <td>
           <span className='update' onClick={() => handleUpdate(item, 'admin')}>
-            Thêm Admin
+            Create Admin
           </span>
         </td>
       )}

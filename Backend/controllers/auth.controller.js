@@ -1,5 +1,6 @@
 const asyncHandler = require("../helpers/async");
-const User = require("../models/Customer.model");
+const Customer = require("../models/Customer.model");
+const generateDigitCode = require("../helpers/generateDigitCode")
 const ErrorResponse = require("../utils/errorResponse");
 
 /**
@@ -16,7 +17,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const user = await User.findOne({ email }).select("+password");
+  const user = await Customer.findOne({ email }).select("+password");
 
   if (!user) {
     return next(new ErrorResponse("Tài khoản không tồn tại", 401));
@@ -37,11 +38,12 @@ exports.login = asyncHandler(async (req, res, next) => {
  * @access PUBLIC
  */
 exports.register = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { firstname,lastname, email, password } = req.body;
   const role = req.body.role === "admin" ? "admin" : "user";
 
-  const user = await User.create({
-    name,
+  const user = await Customer.create({
+    sid : generateDigitCode(),
+    name:firstname +" "+ lastname,
     email,
     password,
     role,
@@ -73,7 +75,7 @@ const sendTokenResponse = async (user, statusCode, res) => {
  * @access PRIVATE
  */
 exports.me = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id);
+  const user = await Customer.findById(req.user.id);
 
   if (!user) {
     return next(new ErrorResponse("Lỗi xác thực", 401));
@@ -91,7 +93,7 @@ exports.me = asyncHandler(async (req, res, next) => {
  * @access PRIVATE
  */
 exports.list = asyncHandler(async (req, res, next) => {
-  const users = await User.find();
+  const users = await Customer.find();
 
   res.status(200).json({
     success: true,
@@ -112,7 +114,7 @@ exports.changeRole = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Quyền không hợp lệ", 400));
   }
 
-  const user = await User.findByIdAndUpdate(
+  const user = await Customer.findByIdAndUpdate(
     id,
     { role },
     {

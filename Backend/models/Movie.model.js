@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const MovieSchema = new mongoose.Schema(
   {
+    sid:{
+      type: String,
+    },
     name: {
       type: String,
       required: [true, "Tên Phim không được để trống"],
@@ -18,14 +21,16 @@ const MovieSchema = new mongoose.Schema(
       type: String,
       required: [true, "Đạo diễn của phim không được để trống"],
     },
-    gerne: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "MovieGerne",
+    genre: {
+      type:String
     },
-    imgAvt: {
+    releaseDate : {
+      type:String
+    },
+    avatar: {
       type: String,
     },
-    imgPoster: {
+    background: {
       type: String,
     },
     status: {

@@ -2,12 +2,16 @@ const mongoose = require("mongoose");
 
 const ScreenSchema = new mongoose.Schema(
   {
+    sid: {
+      type: String,
+    },
     name: {
       type: String,
     },
     cinemaId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Cinemal",
+      // type: mongoose.Schema.Types.ObjectId,
+      // ref: "Cinemal",
+      type: String,
     },
   },
   { timestamps: true }

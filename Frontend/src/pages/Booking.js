@@ -14,7 +14,10 @@ import './Booking.css';
 
 const Booking = () => {
   const [booked, setBooked] = useState([]);
-
+  const [cinema, setCinema] = useState([]);
+  const [province, setProvince] = useState([]);
+  const [showTime, setShowTime] = useState([]);
+  const [screen, setScreen] = useState([]);
   const [status, setStatus] = useState([]);
 
   const [bookingNum, setBookingNum] = useState(0);
@@ -38,6 +41,10 @@ const Booking = () => {
     })
       .then((res) => {
         setMovie(res.data.movie);
+        setCinema(res.data.cinema);
+        setScreen(res.data.screen);
+        setProvince(res.data.province);
+        setShowTime(res.data.showTime)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -65,9 +72,13 @@ const Booking = () => {
             setStatus={setStatus}
             bookingNum={bookingNum}
             setBookingNum={setBookingNum}
-            movie={movie}
+            movie={movie[0]}
             setIsLoading={setIsLoading}
             setError={setError}
+            cinema = {cinema}
+            province = {province}
+            screen = {screen}
+            showTime = {showTime}
           />
         )}
 

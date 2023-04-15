@@ -20,6 +20,9 @@ import './assets/libs/boxicons-2.1.1/css/boxicons.min.css';
 import './scss/App.scss';
 import Account from './pages/Admin/Account';
 import ShowAllMovie from './pages/ShowAllMovie';
+import Cinema from './pages/Admin/Cinema';
+import ShowTime from './pages/Admin/ShowTime';
+import Screen from './pages/Admin/Screen';
 
 // const Home = React.lazy(() => import('./pages/Home'));
 // const Movie = React.lazy(() => import('./pages/Movie'));
@@ -41,6 +44,9 @@ const App = () => {
         <Route path='add-movie' element={<AddMovie />} />
         <Route path='movie' element={<Movies />} />
         <Route path='account' element={<Account />} />
+        <Route path='cinema' element={<Cinema />} />
+        <Route path='showTime' element={<ShowTime />} />
+        <Route path='screen' element={<Screen />} />
       </Route>
     );
   } else {
@@ -50,6 +56,9 @@ const App = () => {
         <Route path='add-movie' element={<Navigate to='/' />} />
         <Route path='movie' element={<Navigate to='/' />} />
         <Route path='account' element={<Navigate to='/' />} />
+        <Route path='cinema' element={<Navigate to='/' />} />
+        <Route path='showTime' element={<Navigate to='/' />} />
+        <Route path='screen' element={<Navigate to='/' />} />
       </Route>
     );
   }

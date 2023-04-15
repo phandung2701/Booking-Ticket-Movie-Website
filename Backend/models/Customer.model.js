@@ -4,6 +4,9 @@ const jwt = require("jsonwebtoken");
 
 const CustomerSchema = new mongoose.Schema(
   {
+    sid: {
+      type: String,
+    },
     name: {
       type: String,
       required: [true, "Tên của bạn không được bỏ trống"],

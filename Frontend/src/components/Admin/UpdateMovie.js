@@ -18,7 +18,7 @@ const UpdateMovie = React.memo(
 
     const [startDate, setStartDate] = useState(new Date());
 
-    const [namefilm, setNameFilm] = useState('');
+    const [name, setNameFilm] = useState('');
     const [country, setCountry] = useState('Việt Nam');
     const [poster, setPoster] = useState('');
     const [avatar, setAvatar] = useState('');
@@ -30,15 +30,16 @@ const UpdateMovie = React.memo(
 
     useEffect(() => {
       if (movie) {
-        setNameFilm(movie.nameFilm);
+        console.log(movie.releaseDate)
+        setNameFilm(movie.name);
         setCountry(movie.country);
         setActor(movie.actor);
         setDescription(movie.description);
         setDirector(movie.director);
-        setCategory(movie.category);
+        setCategory(movie.genre);
         setAvatar(movie.avatar);
         setPoster(movie.background);
-        setStartDate(new Date(movie.movieDay));
+        setStartDate(movie?.releaseDate ? new Date(movie.releaseDate) : new Date());
         movie.trailer && setTrailer(movie.trailer);
       }
     }, [movie]);
@@ -54,7 +55,7 @@ const UpdateMovie = React.memo(
     };
     const onUpdateMovie = () => {
       if (
-        namefilm === '' ||
+        name === '' ||
         country === '' ||
         poster === '' ||
         avatar === '' ||
@@ -76,13 +77,13 @@ const UpdateMovie = React.memo(
           Authorization: `Bearer ${auth.token}`,
         },
         data: {
-          nameFilm: namefilm,
+          nameFilm: name,
           description: description,
           director: director,
           country: country,
-          category: category,
+          genre: category,
           actor: actor,
-          movieDay: startDate,
+          releaseDate: startDate,
           avatar: avatar,
           background: poster,
           trailer: trailer,
@@ -115,7 +116,7 @@ const UpdateMovie = React.memo(
                   name='nameFilm'
                   className='form-input'
                   placeholder='Nhập tên phim'
-                  value={namefilm}
+                  value={name}
                   onChange={(e) => setNameFilm(e.target.value)}
                 />
               </div>

@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const showTimeSchema = new mongoose.Schema(
   {
+    sid:{
+      type: String,
+    },
     movieDay: {
       type: String,
     },
@@ -9,12 +12,10 @@ const showTimeSchema = new mongoose.Schema(
       type: String,
     },
     screenId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Screen",
+      type: String,
     },
     movieId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Movie",
+      type: String,
     },
   },
   { timestamps: true }

@@ -43,7 +43,7 @@ function Navbar({ tab }) {
       })
         .then((res) => {
           setMessage(res.data.user.message);
-          setName(res.data.user.firstname + ' ' + res.data.user.lastname);
+          setName(res.data.user.name);
         })
         .catch((err) => {});
     };

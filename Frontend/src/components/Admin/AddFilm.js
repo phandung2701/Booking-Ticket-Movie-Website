@@ -89,24 +89,24 @@ function AddFilm({ setIsLoading, setError }) {
   return (
     <React.Fragment>
       <Modal onCancel={closeModal} header='Thông báo' show={showModal}>
-        <p>Thêm phim thành công</p>
+        <p>Create successFully!</p>
       </Modal>
 
       <div className='form-addfilm'>
         <div>
           <div className='form-group'>
-            <label className='form-label'>Tên phim</label>
+            <label className='form-label'>Movie name</label>
             <input
               type='text'
               name='nameFilm'
               className='form-input'
-              placeholder='Nhập tên phim'
+              placeholder='movie name'
               value={namefilm}
               onChange={(e) => setNameFilm(e.target.value)}
             />
           </div>
           <div className='form-group'>
-            <label className='form-label'>Quốc gia</label>
+            <label className='form-label'>Country</label>
             <select
               name='country'
               id=''
@@ -122,7 +122,7 @@ function AddFilm({ setIsLoading, setError }) {
             </select>
           </div>
           <div className='form-group'>
-            <label className='form-label'>Ngày phát hành</label>
+            <label className='form-label'>Release date</label>
             <DatePicker
               selected={startDate}
               onChange={(date) => setStartDate(date)}
@@ -135,7 +135,7 @@ function AddFilm({ setIsLoading, setError }) {
             <label className='form-label'>Poster</label>
             <input
               type='text'
-              placeholder='Thêm ảnh bìa'
+              placeholder='poster'
               name='poster'
               className='form-input'
               onChange={(e) => setPoster(e.target.value)}
@@ -148,41 +148,41 @@ function AddFilm({ setIsLoading, setError }) {
               type='text'
               name='avatar'
               className='form-input'
-              placeholder='Thêm ảnh đại diện'
+              placeholder='avatar'
               onChange={(e) => setAvatar(e.target.value)}
             />
           </div>
         </div>
         <div className='frame'>
           <div className='form-group'>
-            <label className='form-label'>Đạo diễn</label>
+            <label className='form-label'>Director</label>
             <input
               type='text'
               name='director'
               className='form-input'
-              placeholder='Nhập đạo diễn'
+              placeholder='director'
               value={director}
               onChange={(e) => setDirector(e.target.value)}
             />
           </div>
           <div className='form-group'>
-            <label className='form-label'>Diễn viên</label>
+            <label className='form-label'>Actor</label>
             <input
               type='text'
               name='actor'
               className='form-input'
-              placeholder='Nhập diễn viên'
+              placeholder='actor'
               value={actor}
               onChange={(e) => setActor(e.target.value)}
             />
           </div>
           <div className='form-group'>
-            <label className='form-label'>Thể loại</label>
+            <label className='form-label'>Genre</label>
             <input
               type='text'
               name='category'
               className='form-input'
-              placeholder='Nhập thể loại'
+              placeholder='genre'
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             />
@@ -194,24 +194,24 @@ function AddFilm({ setIsLoading, setError }) {
             type='text'
             name='trailer'
             className='form-input'
-            placeholder='Thêm trailer'
+            placeholder='trailer'
             value={trailer}
             onChange={(e) => setTrailer(e.target.value)}
           />
         </div>
         <div className='form-group'>
-          <label className='form-label'>Mô tả</label>
+          <label className='form-label'>Description</label>
           <textarea
             type='text'
             name='description'
             className='form-input-area'
-            placeholder='Nhập mô tả'
+            placeholder='description...'
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
         <div className='btn-check' onClick={createMovieHandler}>
-          <p>Xác Nhận</p>
+          <p>Create</p>
         </div>
       </div>
     </React.Fragment>

@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 const generateDigitCode = (length) => {
   length = Math.max(length, 6);
   let dateFactor = moment().diff(

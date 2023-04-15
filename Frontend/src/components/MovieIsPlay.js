@@ -28,7 +28,7 @@ function MovieIsPlay({ movieList, setStatus, executeScroll }) {
           compare_date(new Date(), new Date(item.movieDay)) ? (
             <CardFilm
               key={item._id}
-              movieId={item._id}
+              movieId={item.sid || ''}
               poster={item.avatar}
               movieName={item.nameFilm}
               category={item.category}

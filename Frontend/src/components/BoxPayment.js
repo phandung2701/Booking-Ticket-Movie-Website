@@ -49,17 +49,17 @@ function BoxPayment({
         <div className='payment-infomation'>
           <div className='info-film'>
             <div className='film-title'>
-              <img src={movie.avatar} alt='' />
+              <img src={movie?.avatar} alt='' />
               <div>
-                <h3>{movie.nameFilm}</h3>
-                <p>{movie.category}</p>
+                <h3>{movie?.name}</h3>
+                <p>{movie?.genre}</p>
               </div>
             </div>
             <div className='detail-film-body'>
               <p>
                 Ngày:{' '}
                 <span>
-                  {new Date(movie.movieDay).toLocaleString().split(',')[0]}
+                  {new Date(movie?.releaseDate).toLocaleString().split(',')[0]}
                 </span>
               </p>
               <p>

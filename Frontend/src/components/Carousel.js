@@ -76,7 +76,7 @@ function Carousel({ movieList }) {
                   </p>
                   <p className='btn-booking'>
                     {auth.isLoggedIn ? (
-                      <Link to={`/booking/${item._id}`}>Đặt vé ngay!</Link>
+                      <Link to={`/booking/${item.sid || ''}`}>Đặt vé ngay!</Link>
                     ) : (
                       <p onClick={setModalIsShown.bind(true)}>Đặt vé ngay!</p>
                     )}

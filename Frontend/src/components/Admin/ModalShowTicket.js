@@ -55,7 +55,7 @@ function ModalShowTicket({ setShowTicket, movie }) {
     <tr key={item._id}>
       <td>{index + 1}</td>
 
-      <td>{item.userId.firstname + ' ' + item.userId.lastname}</td>
+      <td>{item.userId.name}</td>
       <td>{item.cinemaId.name}</td>
       <td>{item.cinemaId.address}</td>
       <td>{item.price}</td>

@@ -40,6 +40,29 @@
   background-color: #fff;
   overflow-y: auto;
 }
+.title-choose-day{
+  margin-bottom: 10px;
+}
+.choose-day{
+  display: flex;
+  align-items: center;
+}
+.item-day{
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 14px;
+}
+.item-day.active{
+  background-color: #24a4d8;
+}
 .province-list::-webkit-scrollbar {
   width: 6px;
 }
@@ -111,10 +134,11 @@
   margin-top: 100px;
 }
 .address-cinema {
-  flex: 1;
+  flex: 0.5;
   margin-right: 20px;
   overflow-y: scroll;
   height: 500px;
+
 }
 .address-cinema::-webkit-scrollbar {
   width: 8px;
@@ -127,9 +151,12 @@
   border: 1px solid #515151;
   padding: 10px;
   margin-bottom: 20px;
+  background: #000;
+  cursor: pointer;
+}
+.address-cinema-item.active{
   background: linear-gradient(to right, #2b343c, #372d36);
 }
-
 .address-cinema .header {
   border-bottom: 1px solid #515151;
 }

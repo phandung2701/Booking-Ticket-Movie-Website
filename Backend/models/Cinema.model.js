@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const CinemaSchema = new mongoose.Schema(
   {
+    sid: {
+      type: String,
+    },
     name: {
       type: String,
     },
@@ -9,8 +12,7 @@ const CinemaSchema = new mongoose.Schema(
       type: String,
     },
     provinceId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Province",
+      type: String,
     },
   },
   { timestamps: true }

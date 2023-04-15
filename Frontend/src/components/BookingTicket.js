@@ -11,6 +11,10 @@ import { numberToString } from "../utils";
 
 function BookingTicket({
   movie,
+  cinema,
+  province,
+  showTime,
+  screen,
   setIsLoading,
   setError,
   booked,
@@ -24,35 +28,41 @@ function BookingTicket({
 
   const navigate = useNavigate();
   // const [province, setProvince] = useState('Hà Nội');
-  // const [showMenuProvince, setShowMenuProvince] = useState(false);
+  const [showMenuProvince, setShowMenuProvince] = useState(false);
+  const [day,setDay] = useState([])
+  const [chooseProvince,setChooseProvince] = useState('')
+  const [chooseDay,setChooseDay] = useState('')
+  const [chooseCinema,setChooseCinema] = useState('')
+  const [chooseShowTime,setChooseShowTime] = useState('')
+  const [listCinema,setListCinema] = useState([])
+  const [listShowTime,setListShowTime] = useState([])
+
+
+  const convertDate = (timeList)=>{
+    let dayList = timeList.reduce((acc,cur)=>{
+      let time = acc.find(ele => ele.day == new Date(cur.movieDay).getDate())
+      if(time){
+        time.time.push(cur.time)
+      }
+      else{
+        acc.push({day : new Date(cur.movieDay).getDate(),
+          month : new Date(cur.movieDay).getMonth()+1,
+          year:new Date(cur.movieDay).getFullYear()
+          ,time : [cur.time]})
+      }
+      return acc
+    },[])
+    return dayList
+  }
   // const [statusDay, setStatusDay] = useState(movie.movieDay);
-  const [cinema, setCinema] = useState([]);
   const [chooseTime, setChooseTime] = useState({
-    idCinema: movie._id,
+    idCinema: movie?.sid,
     cinemaName: "",
     cinemaAddress: "",
     time: "",
   });
 
   const [selectedSnacks, setSelectedSnacks] = useState([]);
-
-  useEffect(() => {
-    const fetchCinema = () => {
-      axios({
-        method: "get",
-        baseURL: process.env.REACT_APP_BACKEND_URL,
-        url: "/v1/cinema",
-      })
-        .then((res) => {
-          setCinema(res.data.cinema);
-        })
-        .catch((err) => {
-          setError(err.response.data.error);
-        });
-    };
-    fetchCinema();
-  }, []);
-
   // const onGetValueProvine = (e) => {
   //   setProvince(e.target.innerHTML);
   //   setShowMenuProvince(false);
@@ -85,16 +95,9 @@ function BookingTicket({
 
   const [isTouched, setIsTouched] = useState(false);
 
-  const onGetShowTime = (e) => {
-    setIsTouched(true);
-    const obj = {
-      idCinema: e.target.id,
-      cinemaName: cinema.find((el) => el._id === e.target.id).name,
-      cinemaAddress: cinema.find((el) => el._id === e.target.id).address,
-      time: e.target.innerHTML,
-    };
-    setChooseTime(obj);
-    fetchSeat(obj);
+  const handleShowTime = (ele,e) => {
+    e.stopPropagation()
+    setChooseShowTime(ele.sid)
   };
 
   const [paymentInfo, setPaymentInfo] = useState({});
@@ -143,6 +146,30 @@ function BookingTicket({
       cinemaAddress: chooseTime.cinemaAddress,
     });
   };
+  const handleChooseProvince = (item)=>{
+    let arr = []
+    setChooseCinema('')
+    setChooseShowTime('')
+    if(chooseProvince === item.sid){
+      arr = []
+      setChooseProvince('')
+      setListCinema(arr)
+      return
+    }
+    arr = cinema.filter(ele => ele.provinceId === item.sid)
+    setChooseProvince(item.sid)
+    setListCinema(arr)
+  }
+  const handleChooseCinema = (item)=>{
+    let listScreen = screen.filter(ele => ele.cinemaId === item.sid).reduce((acc,cur)=> ([...acc,cur.sid]),[])
+    let showTimeList = showTime.filter(ele => listScreen.includes(ele.screenId))
+    setListShowTime(showTimeList)
+    setChooseCinema(item.sid)
+  }
+  const handleChooseDay = (item)=>{
+      setChooseDay(item)
+  }
+  console.log(chooseDay)
   return (
     <React.Fragment>
       <BoxPayment
@@ -154,131 +181,74 @@ function BookingTicket({
       />
       <div className="Booking-container">
         <div className="movie-booking">
-          <p>{movie.nameFilm}</p>
+          <p>{movie?.name}</p>
           <p>
-            Khởi chiếu :{" "}
-            {new Date(movie.movieDay).toLocaleString().split(",")[0]}
+            Phát hành :{" "}
+            {new Date(movie?.releaseDate).toLocaleString().split(",")[0]}
           </p>
         </div>
         <h2>Đặt vé xem phim</h2>
         <div className="booking-ticket">
-          {/* <div className='choose-province'>
-            <h3>Chọn tỉnh</h3>
-            <input
-              type='text'
-              name='province'
-              className='province-input'
-              readOnly='true'
-              value={province}
-              onClick={() => setShowMenuProvince(true)}
-            />
-            {showMenuProvince ? (
-              <div className='province-list'>
-                <p
-                  className='province-item'
-                  onClick={(e) => onGetValueProvine(e)}
-                >
-                  Hà Nội
-                </p>
-                <p
-                  className='province-item'
-                  onClick={(e) => onGetValueProvine(e)}
-                >
-                  Thanh Hóa
-                </p>
-                <p
-                  className='province-item'
-                  onClick={(e) => onGetValueProvine(e)}
-                >
-                  Thái Bình
-                </p>
-                <p
-                  className='province-item'
-                  onClick={(e) => onGetValueProvine(e)}
-                >
-                  Nghệ An
-                </p>
-                <p
-                  className='province-item'
-                  onClick={(e) => onGetValueProvine(e)}
-                >
-                  Nghệ An
-                </p>
-
-                <p
-                  className='province-item'
-                  onClick={(e) => onGetValueProvine(e)}
-                >
-                  Nghệ An
-                </p>
+        <h3>Chọn ngày</h3>
+        <div className="choose-day">
+         {convertDate(showTime).map(((ele,idx) => (
+            <div key={idx} className={(chooseDay?.day == ele.day && chooseDay?.month == ele.month && chooseDay.year == ele.year)? "item-day active" :"item-day" } onClick={()=>handleChooseDay(ele)}>
+              {ele.day}/{ele.month}/{ele.year}
+            </div>
+          )))}
+         </div>
+         <h3>Chọn tỉnh</h3>
+        <div className="choose-day">
+         {province.map(((ele,idx) => (
+            <div key={ele.sid} className={`${ele.sid === chooseProvince? "active item-day" : "item-day"}`} onClick={()=>handleChooseProvince(ele)}>
+              {ele.name}
+            </div>
+          )))}
+         </div>
+          {chooseProvince && <h3>Chọn rạp</h3>}
+          {chooseProvince && (
+            <div className="choose-time-seat">
+              <div className="address-cinema">
+                {listCinema.map((item, index) => {
+                  return (
+                    <div className={item.sid === chooseCinema ? "address-cinema-item active" : "address-cinema-item" } key={item.sid}
+                    onClick={()=>handleChooseCinema(item)}
+                    >
+                      <div className="header">
+                        <h3>{item.name}</h3>
+                        <p>{item.address}</p>
+                      </div>
+                      <div className="showtime-content">
+                        {chooseCinema && listShowTime?.map((ele, i) => (
+                          <p
+                            key={i}
+                            className={
+                              (chooseShowTime === ele.sid) 
+                                ? "time-active"
+                                : ""
+                            }
+                            id={item.sid}
+                            onClick={(e)=> handleShowTime(ele,e)}
+                          >
+                            {ele.time}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            ) : null}
-          </div> */}
-
-          {/* <div className='choose-cinema'>
-            <div>
-              <p>Tất cả</p>
+              {chooseShowTime && <Screen
+                isTouched={isTouched}
+                booked={booked}
+                status={status}
+                setStatus={setStatus}
+                setBookingNum={setBookingNum}
+              ></Screen>}
             </div>
-            <div>
-              <img
-                src='https://play-lh.googleusercontent.com/I26_hScON1NJJgBn3_4hbw4yw00n54PKHEUZxf5HJ2iDyc40O-JHdUPLCqFA7qKOfG8'
-                alt=''
-              />
-            </div>
-            <div>
-              <img
-                src='https://img.favpng.com/13/14/2/logo-lotte-cinema-font-png-favpng-X0z4jTFHKFNUHR8ER8mETcXKU.jpg'
-                alt=''
-              />
-            </div>
-            <div>
-              <img
-                src='https://cdn.tgdd.vn/GameApp/2/224709/Screentshots/lotteria-delivery-ung-dung-dat-ga-ran-lotteria-tai-nha-224709-logo-18-06-2020.png'
-                alt=''
-              />
-            </div>
-          </div> */}
-          <h3>Chọn rạp</h3>
-          <div className="choose-time-seat">
-            <div className="address-cinema">
-              {cinema.map((item, index) => {
-                return (
-                  <div className="address-cinema-item" key={item.id}>
-                    <div className="header">
-                      <h3>{item.name}</h3>
-                      <p>{item.address}</p>
-                    </div>
-                    <div className="showtime-content">
-                      {item.showTime.map((time, i) => (
-                        <p
-                          key={i}
-                          className={
-                            (chooseTime.idCinema === item._id) &
-                            (time === chooseTime.time)
-                              ? "time-active"
-                              : ""
-                          }
-                          id={item._id}
-                          onClick={onGetShowTime}
-                        >
-                          {time}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <Screen
-              isTouched={isTouched}
-              booked={booked}
-              status={status}
-              setStatus={setStatus}
-              setBookingNum={setBookingNum}
-            ></Screen>
-          </div>
+          )}
           <Snacks
-            isActive={isTouched}
+            isActive={true}
             selectedSnacks={selectedSnacks}
             setSelectedSnacks={setSelectedSnacks}
           />

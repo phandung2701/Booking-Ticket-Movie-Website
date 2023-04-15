@@ -54,8 +54,8 @@ const snacksData = [
   },
 ];
 
-const SnacksList = ({ isActive, selectedSnacks, setSelectedSnacks }) => {
-  const [showSnacks, setShowSnacks] = useState(false);
+const SnacksList = ({ isActive = true, selectedSnacks, setSelectedSnacks }) => {
+  const [showSnacks, setShowSnacks] = useState(true);
   const [snacks, setSnacks] = useState(snacksData);
 
   const handleToggleClick = () => {
@@ -119,7 +119,6 @@ const SnacksList = ({ isActive, selectedSnacks, setSelectedSnacks }) => {
       }
     });
   };
-
   return (
     <div className="snacks-wrapper">
       <div className="snacks-header" onClick={handleToggleClick}>

@@ -24,10 +24,22 @@ const sidebarNav = [
     text: 'Account',
   },
   {
-    link: '/',
-    section: 'stats',
-    icon: <i className="bx bx-line-chart"></i>,
-    text: 'Stats',
+    link: 'cinema',
+    section: 'Cinema',
+    icon: <i className="bx bx-camera-movie"></i>,
+    text: 'Cinema',
+  },
+  {
+    link: 'screen',
+    section: 'Screen',
+    icon: <i className="bx bx-chalkboard"></i>,
+    text: 'Screen',
+  },
+  {
+    link: 'showTime',
+    section: 'ShowTime',
+    icon: <i className="bx bx-time"></i>,
+    text: 'ShowTime',
   },
   {
     link: '/',
