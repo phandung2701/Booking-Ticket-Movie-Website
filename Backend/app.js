@@ -17,6 +17,8 @@ const cinemaRouter = require('./routes/cinema.route');
 const provinceRouter = require('./routes/province.route')
 const screen = require('./routes/screen.route')
 const showTime = require('./routes/showtime.route')
+const booking = require('./routes/booking.route')
+
 // process config
 const app = express();
 dotenv.config();
@@ -34,6 +36,8 @@ app.use('/api/v1/cinema', cinemaRouter);
 app.use('/api/v1/province', provinceRouter);
 app.use('/api/v1/screen', screen);
 app.use('/api/v1/showTime', showTime);
+app.use('/api/v1/booking', booking);
+
 
 app.use(errorHandler);
 

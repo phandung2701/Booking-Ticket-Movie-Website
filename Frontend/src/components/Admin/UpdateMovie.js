@@ -30,7 +30,6 @@ const UpdateMovie = React.memo(
 
     useEffect(() => {
       if (movie) {
-        console.log(movie.releaseDate)
         setNameFilm(movie.name);
         setCountry(movie.country);
         setActor(movie.actor);
@@ -53,7 +52,7 @@ const UpdateMovie = React.memo(
     const changeNationHandler = (e) => {
       setCountry(e.target.value);
     };
-    const onUpdateMovie = () => {
+    const onUpdateMovie = async() => {
       if (
         name === '' ||
         country === '' ||

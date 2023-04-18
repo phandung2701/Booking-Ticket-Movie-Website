@@ -61,13 +61,13 @@ function Carousel({ movieList }) {
       </Modal>
       <div className='carousel-container'>
         <Slider {...settings}>
-          {movieList.slice(-7, -1).map((item, index) => {
+          {movieList.slice(0, 5).map((item, index) => {
             return index >= 6 &&
-              compare_date(new Date(), new Date(item.movieDay)) ? null : (
+              compare_date(new Date(), new Date(item.releaseDate)) ? null : (
               <div key={item._id} className='carousel'>
                 <img src={item.background} alt='' />
                 <div className='content'>
-                  <h2 onClick={() => onMovieDetail(item)}>{item.nameFilm}</h2>
+                  <h2 onClick={() => onMovieDetail(item)}>{item.name}</h2>
                   <p className='des' onClick={() => onMovieDetail(item)}>
                     {item.description}
                   </p>

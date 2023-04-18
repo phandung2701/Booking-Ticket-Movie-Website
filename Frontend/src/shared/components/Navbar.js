@@ -95,7 +95,7 @@ function Navbar({ tab }) {
   };
   const onMovieSearch = (e) => {
     if (e.key === 'Enter' || e.keyCode === 13) {
-      navigate(`/movie/search/${to_slug(e.target.value)}`);
+      navigate(`/movies`);
 
       e.target.value = '';
     }
@@ -127,10 +127,9 @@ function Navbar({ tab }) {
             <div className='navbar-logo'>
               <Link to={'/'}>
                 <img
-                  src='https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bmV0ZmxpeCUyMGxvZ298ZW58MHx8MHx8&w=1000&q=80'
+                  src='https://www.cgv.vn/skin/frontend/cgv/default/images/cgvlogo.png'
                   alt=''
                 />
-                <span>NITFLEX</span>
               </Link>
             </div>
             <div className='nav-search'>

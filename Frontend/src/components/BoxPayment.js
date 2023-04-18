@@ -68,7 +68,8 @@ function BoxPayment({
               <p>
                 Rạp chọn: <span>{paymentInfo.cinemaName}</span>
               </p>
-              <p>{paymentInfo.cinemaAddress}</p>
+              <p>Ghế: {paymentInfo.seat?.map((ele,idx) => (<span key={idx}>{ele},</span>))}</p>
+              <p>Địa chỉ : <span>{paymentInfo.cinemaAddress}</span></p>
             </div>
             <p onClick={bookingHandler}>Thanh Toán</p>
           </div>

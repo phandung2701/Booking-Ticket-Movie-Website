@@ -1,11 +1,13 @@
 import React from 'react';
 
 import './Cart.css';
+import { numberToString } from '../utils';
 
 const CartItem = ({
   setChosenTicket,
   movie,
   setIsLoading,
+  ticket,
   setError,
   setModalIsShown,
 }) => {
@@ -13,68 +15,56 @@ const CartItem = ({
     setChosenTicket(movieId);
     setModalIsShown(true);
   };
+  const convertDate = (data)=>{
+    const date = data ? new Date(data) : new Date();
 
-  let item;
-  if (
-    new Date() >=
-    new Date(
-      movie.movieDay.toString().substr(0, 11) + movie.showTime + ':00.000Z'
-    )
-  ) {
-    item = <span className='wait'>Phim đã chiếu</span>;
-  } else if (movie.status === 'booked') {
-    item = (
-      <button className='cancel-btn' onClick={() => cancelHandler(movie._id)}>
-        Hủy vé
-      </button>
-    );
-  } else if (movie.status === 'cancelled') {
-    item = <span className='wait'></span>;
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   }
-
+  const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
   return (
     <>
       <div className='box-ticket'>
-        <img src={movie.avatar} alt='' />
+        <img src={movie?.avatar} alt='' />
         <div className='ticket-item'>
           <div>
+            <p>Mã vé : <span style={{color:'#24a4d8'}}>{ticket.sid}</span></p>
+          </div>
+          <div>
             <p>
-              Tên Phim: <span>{movie.nameFilm}</span>
+              Tên Phim: <span>{movie?.name}</span>
             </p>
             <p>
               Ngày chiếu:{' '}
               <span>
-                {new Date(movie.movieDay).toLocaleString().split(',')[0]}
+              { convertDate(ticket?.movieDay)}
               </span>
             </p>
           </div>
           <div>
             <p>
-              Chỗ ngồi: <span>{movie.seat}</span>
+              Chỗ ngồi: {ticket?.seat.map(((st,idx) =><span key={idx}>{st},</span>))}
             </p>
             <p>
-              Giá: <span>50.000</span>
+              Giá: <span>{numberToString(ticket?.price)} VND</span>
             </p>
           </div>
           <div>
             <p>
-              Suất chiếu: <span>{movie.showTime}</span>
+              Suất chiếu: <span>{ticket?.time}</span>
             </p>
             <p>
-              Rạp: <span>CGV AEON Hà Đông</span>
+              Rạp: <span>{ticket?.cinema[0]?.name}</span>
             </p>
+          
           </div>
-          <div>
+         { ticket.comboId.length > 0 && <div>
             <p>
-              Trạng thái:{' '}
-              {movie.status === 'booked' ? (
-                <span className='success'>Đã đặt</span>
-              ) : (
-                <span className='wait'>Đã hủy</span>
-              )}
+              Bắp,nước: {ticket.comboId.map((food,idx)=> <span>{food.title}, </span>)}
             </p>
-          </div>
-          <div>{item}</div>
+          </div>}
         </div>
       </div>
     </>

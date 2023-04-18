@@ -49,7 +49,7 @@ const UpdateScreen = React.memo(
     const changeNationHandler = (e) => {
       setCinemaId(e.target.value);
     };
-    const onUpdateCinema = () => {
+    const onUpdateCinema = async() => {
       if (
         name === '' ||
         cinemaId === ''
@@ -60,13 +60,13 @@ const UpdateScreen = React.memo(
         }
         try{
           if(action === 'update'){
-            instance.post('/v1/screen/update',{sid : screen.sid,name,cinemaId})
+            await instance.post('/v1/screen/update',{sid : screen.sid,name,cinemaId})
             setShowModal(true);
             setIsLoading(true);
             triggerLoading();
           }
           else if(action === 'create'){
-            instance.post('/v1/screen/create',{name,cinemaId})
+            await instance.post('/v1/screen/create',{name,cinemaId})
             setShowModal(true);
             setIsLoading(true);
             triggerLoading();
@@ -112,7 +112,7 @@ const UpdateScreen = React.memo(
                   id=''
                   className='form-input'
                   onChange={changeNationHandler}
-                  defaultValue={screen?.cinemaId}
+                  value={cinemaId}
                 >
                   {cinema.map((ele)=>(
                     <option value={ele.sid}>{ele.name}</option>

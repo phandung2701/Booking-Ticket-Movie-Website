@@ -168,11 +168,11 @@ const SnacksList = ({ isActive = true, selectedSnacks, setSelectedSnacks }) => {
                 <p>{description}</p>
                 <p>Giá: {numberToString(price)} VND</p>
                 <div>
-                  <button onClick={() => handleIncrement(id)}>+</button>
-
-                  <span className="count">{count || 0}</span>
 
                   <button onClick={() => handleDecrement(id)}>-</button>
+                  <span className="count">{count || 0}</span>
+                  <button onClick={() => handleIncrement(id)}>+</button>
+
                 </div>
               </div>
             </li>

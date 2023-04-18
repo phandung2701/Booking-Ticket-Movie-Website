@@ -5,6 +5,7 @@ const {
   all,
   create,
   detail,
+  detail_v2,
   update,
   searchName,
   search,
@@ -13,6 +14,7 @@ const { protect, hasAuthorization } = require('../middleware/auth');
 
 router.get('/', all);
 router.get('/:id', detail);
+router.post('/:id', detail_v2);
 router.post('/search', search);
 router.post('/search/name', searchName);
 router.post('/', protect, hasAuthorization('admin'), create);

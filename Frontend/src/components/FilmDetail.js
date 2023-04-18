@@ -36,7 +36,7 @@ function FilmDetail({ movieId, setIsLoading, setError, setStatus, status }) {
     }
     setShowTrailer(false);
   };
-
+console.log(movie)
   return (
     <div className='film-container'>
       <div className='poster-film'>
@@ -61,7 +61,7 @@ function FilmDetail({ movieId, setIsLoading, setError, setStatus, status }) {
       <div className='detail-film'>
         <img src={movie.avatar} alt='' />
         <div className='detail'>
-          <h2>{movie.nameFilm}</h2>
+          <h2>{movie?.name}</h2>
           <Link to={`/booking/${movieId}`}>
             <p>Đặt vé</p>
           </Link>
@@ -74,11 +74,11 @@ function FilmDetail({ movieId, setIsLoading, setError, setStatus, status }) {
               <p>
                 Phát hành:{' '}
                 <span>
-                  {new Date(movie.movieDay).toLocaleString().split(',')[0]}
+                  {new Date((movie?.releaseDate? movie?.releaseDate : new Date() )).toLocaleString().split(',')[0]}
                 </span>
               </p>
               <p>
-                Thể loại: <span>{movie.category}</span>
+                Thể loại: <span>{movie?.genre}</span>
               </p>
               <p>
                 Quốc gia: <span>{movie.country}</span>

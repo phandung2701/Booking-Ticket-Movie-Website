@@ -51,7 +51,7 @@ const UpdateCinema = React.memo(
     const changeNationHandler = (e) => {
       setProvinceId(e.target.value);
     };
-    const onUpdateCinema = () => {
+    const onUpdateCinema = async() => {
       if (
         name === '' ||
         address === '' ||
@@ -63,13 +63,13 @@ const UpdateCinema = React.memo(
         }
         try{
           if(action === 'update'){
-            instance.post('/v1/cinema/update',{sid : cinema.sid,name,address,provinceId})
+            await instance.post('/v1/cinema/update',{sid : cinema.sid,name,address,provinceId})
             setShowModal(true);
             setIsLoading(true);
             triggerLoading();
           }
           else if(action === 'create'){
-            instance.post('/v1/cinema/create',{name,address,provinceId})
+            await instance.post('/v1/cinema/create',{name,address,provinceId})
             setShowModal(true);
             setIsLoading(true);
             triggerLoading();
@@ -125,7 +125,7 @@ const UpdateCinema = React.memo(
                   id=''
                   className='form-input'
                   onChange={changeNationHandler}
-                  defaultValue={cinema?.provinceId}
+                  value={provinceId}
                 >
                   {province.map((ele)=>(
                     <option value={ele.sid}>{ele.name}</option>

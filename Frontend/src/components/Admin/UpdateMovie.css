@@ -1,6 +1,10 @@
 .form-group {
   width: 100%;
 }
+.react-time-picker__inputGroup{
+  display: flex !important;
+  align-items: center !important;
+}
 .form-label {
   margin-bottom: 10px;
 }

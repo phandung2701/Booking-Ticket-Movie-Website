@@ -21,7 +21,7 @@ const Booking = () => {
   const [status, setStatus] = useState([]);
 
   const [bookingNum, setBookingNum] = useState(0);
-
+  const [price, setPrice] = useState(0);
   const { movieId } = useParams();
 
   const [error, setError] = useState(null);
@@ -35,7 +35,7 @@ const Booking = () => {
   const fetchMovie = () => {
     setIsLoading(true);
     axios({
-      method: 'get',
+      method: 'post',
       baseURL: process.env.REACT_APP_BACKEND_URL,
       url: `/v1/movie/${movieId}`,
     })
@@ -79,6 +79,8 @@ const Booking = () => {
             province = {province}
             screen = {screen}
             showTime = {showTime}
+            price = {price}
+            setPrice = {setPrice}
           />
         )}
 

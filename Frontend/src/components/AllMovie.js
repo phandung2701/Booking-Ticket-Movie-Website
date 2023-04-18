@@ -44,10 +44,10 @@ function AllMovie(props) {
               key={movie._id}
               movieId={movie?.sid || ''}
               poster={movie.avatar}
-              movieName={movie.nameFilm}
-              category={movie.category}
+              movieName={movie?.name || ''}
+              category={movie?.genre||''}
               executeScroll={props.executeScroll}
-              movieDay={movie.movieDay}
+              movieDay={movie?.releaseDate|| new Date()}
             />
           ))
         ) : (

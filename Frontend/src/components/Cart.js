@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 function Cart({
   setChosenTicket,
-  movieList,
+  booked,
   setIsLoading,
   setError,
   setModalIsShown,
@@ -14,12 +14,13 @@ function Cart({
     <div className='Cart-container'>
       <h3>Các vé đã đặt: </h3>
       <div className='Cart'>
-        {movieList[0] ? (
-          movieList.map((movie, index) => (
+        {booked.length > 0 ? (
+          booked.map((ele, index) => (
             <CartItem
               key={index}
               setChosenTicket={setChosenTicket}
-              movie={movie}
+              movie={ele.movie[0]}
+              ticket = {ele}
               setIsLoading={setIsLoading}
               setError={setError}
               setModalIsShown={setModalIsShown}

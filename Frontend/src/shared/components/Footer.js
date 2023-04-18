@@ -28,7 +28,7 @@ function Footer() {
             <ul>
               <li>Địa chỉ: Hà Nội</li>
               <li>Hotline: 093456789</li>
-              <li>Email: nitflex@gmail.com</li>
+              <li>Email: cgv@gmail.com</li>
             </ul>
           </div>
           <div className='connect'>
@@ -39,7 +39,7 @@ function Footer() {
                 alt=''
               />
               <img
-                src='https://freepikpsd.com/file/2019/10/foto-in-png-4-1.png'
+                src='https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg'
                 alt=''
               />
               <img
@@ -52,8 +52,9 @@ function Footer() {
         <div className='footer-license'>
           <div className='img-wrapper'>
             <img
-              src='https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bmV0ZmxpeCUyMGxvZ298ZW58MHx8MHx8&w=1000&q=80'
+              src='https://www.cgv.vn/skin/frontend/cgv/default/images/cgvlogo.png'
               alt=''
+              style={{width:"60px"}}
             />
             <img
               src='https://luatthienduc.vn/cloud/image-20200115095241-1.png'
@@ -64,7 +65,7 @@ function Footer() {
               alt=''
             />
           </div>
-          <p>COPYRIGHT &copy; NITFLEX 2022. ALL RIGHTS RESERVED </p>
+          <p>COPYRIGHT &copy; CGV 2022. ALL RIGHTS RESERVED </p>
         </div>
       </div>
     </div>

@@ -42,7 +42,13 @@ function Account() {
       <td>{item.email}</td>
       <td>{item.role}</td>
 
-      {item.role === 'admin' ? (
+      {item?.root ?<td>
+          <span
+            className='root'
+          >
+            Root
+          </span>
+        </td> :item.role === 'admin' ? (
         <td>
           <span
             className='delete-ticket'

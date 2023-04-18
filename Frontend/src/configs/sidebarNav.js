@@ -41,12 +41,7 @@ const sidebarNav = [
     icon: <i className="bx bx-time"></i>,
     text: 'ShowTime',
   },
-  {
-    link: '/',
-    section: 'settings',
-    icon: <i className="bx bx-cog"></i>,
-    text: 'Settings',
-  },
+
 ];
 
 export default sidebarNav;

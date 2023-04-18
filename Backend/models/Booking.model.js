@@ -1,9 +1,16 @@
+const { json } = require("express");
 const mongoose = require("mongoose");
 
 const BookingSchema = new mongoose.Schema(
   {
-    movienName: {
-      type: String,
+    sid:{
+      type:String
+    },
+    movie: {
+      type: Array,
+    },
+    cinema:{
+      type:Array
     },
     movieDay: {
       type: String,
@@ -15,31 +22,24 @@ const BookingSchema = new mongoose.Schema(
       type: Number,
     },
     showTimeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "ShowTime",
+      type: String,
     },
     status: {
       type: String,
       enum: ["active", "cancel", "draft"],
       default: "active",
     },
-    createAt: {
-      type: Date,
-    },
     customerId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Customer",
+      type: String,
     },
     seat: {
       type: Array,
     },
     comboId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Combo",
+      type: Array
     },
     foodId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Food",
+      type: Array
     },
   },
   { timestamps: true }

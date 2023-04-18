@@ -3,7 +3,7 @@ const generateDigitCode = require('../helpers/generateDigitCode');
 const ShowTime = require('../models/ShowTime.model');
 
 exports.all = asyncHandler(async (req, res, next) => {
-  const showTime = await ShowTime.find();
+  const showTime = await ShowTime.find().sort({createdAt: -1});
 
   return res.status(200).json({
     success: true,

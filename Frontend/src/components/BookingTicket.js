@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Screen from "./Screen";
 import BoxPayment from "../components/BoxPayment";
 import "./BookingTicket.css";
@@ -8,6 +8,8 @@ import { AuthContext } from "../shared/context/auth-context";
 import axios from "axios";
 import Snacks from "./Snacks";
 import { numberToString } from "../utils";
+import Modal from "../shared/components/Modal";
+import Button from "../shared/components/Button";
 
 function BookingTicket({
   movie,
@@ -21,14 +23,20 @@ function BookingTicket({
   setBooked,
   status,
   setStatus,
+  price,
+  setPrice,
   bookingNum,
   setBookingNum,
 }) {
   const auth = useContext(AuthContext);
-
+  const instance = axios.create({
+    baseURL: process.env.REACT_APP_BACKEND_URL,
+    headers: {
+      Authorization: `Bearer ${auth.token}`,
+    },
+  })
   const navigate = useNavigate();
   // const [province, setProvince] = useState('Hà Nội');
-  const [showMenuProvince, setShowMenuProvince] = useState(false);
   const [day,setDay] = useState([])
   const [chooseProvince,setChooseProvince] = useState('')
   const [chooseDay,setChooseDay] = useState('')
@@ -36,7 +44,6 @@ function BookingTicket({
   const [chooseShowTime,setChooseShowTime] = useState('')
   const [listCinema,setListCinema] = useState([])
   const [listShowTime,setListShowTime] = useState([])
-
 
   const convertDate = (timeList)=>{
     let dayList = timeList.reduce((acc,cur)=>{
@@ -54,86 +61,55 @@ function BookingTicket({
     },[])
     return dayList
   }
-  // const [statusDay, setStatusDay] = useState(movie.movieDay);
-  const [chooseTime, setChooseTime] = useState({
-    idCinema: movie?.sid,
-    cinemaName: "",
-    cinemaAddress: "",
-    time: "",
-  });
+
 
   const [selectedSnacks, setSelectedSnacks] = useState([]);
-  // const onGetValueProvine = (e) => {
-  //   setProvince(e.target.innerHTML);
-  //   setShowMenuProvince(false);
-  // };
-
-  // console.log(movie._id, booked, status, bookingNum);
-  const fetchSeat = (chooseTime) => {
-    setBooked([]);
-    setStatus([]);
-    setBookingNum(0);
-    axios({
-      method: "get",
-      baseURL: process.env.REACT_APP_BACKEND_URL,
-      url: `/v1/seat?fid=${movie._id}&cid=${chooseTime.idCinema}&st=${
-        chooseTime.time.substr(0, 2) + "00"
-      }`,
-      headers: {
-        Authorization: `Bearer ${auth.token}`,
-      },
-    })
-      .then((res) => {
-        setBooked([...res.data.seat]);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setError(err.response.data.error);
-      });
-  };
-
+ 
   const [isTouched, setIsTouched] = useState(false);
 
-  const handleShowTime = (ele,e) => {
+  const handleShowTime = async(ele,e) => {
     e.stopPropagation()
-    setChooseShowTime(ele.sid)
+    if(ele?.sid){
+      let seatBooked = await instance.post('/v1/seat/booked',{showTimeId:ele.sid})
+      setBooked(seatBooked.data.booked)
+    }
+    setChooseShowTime(ele?.sid)
   };
 
   const [paymentInfo, setPaymentInfo] = useState({});
 
   const [paymentIsShown, setPaymentIsShown] = useState(false);
-  const bookingHandler = () => {
-    setIsLoading(true);
-    axios({
-      method: "post",
-      baseURL: process.env.REACT_APP_BACKEND_URL,
-      url: `/v1/ticket`,
-      headers: {
-        Authorization: `Bearer ${auth.token}`,
-      },
-      data: {
-        filmId: movie._id,
-        cinemaId: chooseTime.idCinema,
-        showTime: chooseTime.time.substr(0, 5),
-        seat: status,
-        room: "P1",
-        price: 50000 * bookingNum,
-      },
-    })
-      .then((res) => {
-        setIsLoading(false);
-        navigate("/library");
+  const bookingHandler = async() => {
+    try{
+      setIsLoading(true);
+      await instance.post('/v1/booking/create',{
+          movieDay: showTime.filter(ele => ele.sid === chooseShowTime)[0]?.movieDay,
+          movie : movie,
+          cinema : cinema.filter(ele => ele.sid === chooseCinema),
+          showTimeId: chooseShowTime,
+          seat: status,
+          price : price +
+          selectedSnacks.reduce((accumulatedPrice, snack) => {
+            return accumulatedPrice + snack.price * snack.count;
+          }, 0),
+          customerId : auth.sid,
+          time : showTime.filter(ele => ele.sid === chooseShowTime)[0]?.time,
+          foodId : selectedSnacks,
+          comboId : selectedSnacks,
       })
-      .catch((err) => {
-        setIsLoading(false);
-        setError(err.response.data.error);
-      });
+      setIsLoading(false);
+      if(window.confirm("Đặt vé thành công")){
+        navigate("/library");
+      }
+    }
+    catch(err){
+      setIsLoading(false);
+      setError(err.response.data.error);
+    }
+   
   };
   const showPayment = () => {
     if (
-      chooseTime.idCinema === "" ||
-      chooseTime.time === "" ||
       status.length === 0
     ) {
       setError("Oops... Có vẻ bạn thiếu thông tin nào đó");
@@ -141,15 +117,19 @@ function BookingTicket({
     }
     setPaymentIsShown(true);
     setPaymentInfo({
-      time: chooseTime.time.substr(0, 5),
-      cinemaName: chooseTime.cinemaName,
-      cinemaAddress: chooseTime.cinemaAddress,
+      time: showTime.filter(ele => ele.sid === chooseShowTime)[0]?.time,
+      cinemaName: cinema.filter(ele => ele.sid === chooseCinema)[0]?.name,
+      cinemaAddress:cinema.filter(ele => ele.sid === chooseCinema)[0]?.address,
+      seat: status
     });
   };
   const handleChooseProvince = (item)=>{
     let arr = []
     setChooseCinema('')
     setChooseShowTime('')
+    setStatus([])
+    setPrice(0)
+    setBookingNum(0)
     if(chooseProvince === item.sid){
       arr = []
       setChooseProvince('')
@@ -169,7 +149,6 @@ function BookingTicket({
   const handleChooseDay = (item)=>{
       setChooseDay(item)
   }
-  console.log(chooseDay)
   return (
     <React.Fragment>
       <BoxPayment
@@ -219,20 +198,26 @@ function BookingTicket({
                         <p>{item.address}</p>
                       </div>
                       <div className="showtime-content">
-                        {chooseCinema && listShowTime?.map((ele, i) => (
-                          <p
-                            key={i}
-                            className={
-                              (chooseShowTime === ele.sid) 
-                                ? "time-active"
-                                : ""
-                            }
-                            id={item.sid}
-                            onClick={(e)=> handleShowTime(ele,e)}
-                          >
-                            {ele.time}
-                          </p>
-                        ))}
+                        { (listShowTime.length > 0 && item.sid === chooseCinema ) ?(
+                           listShowTime.map((ele, i) => (
+                            <p
+                              key={i}
+                              className={
+                                (chooseShowTime === ele.sid) 
+                                  ? "time-active"
+                                  : ""
+                              }
+                              id={item.sid}
+                              onClick={(e)=> handleShowTime(ele,e)}
+                            >
+                              {ele.time}
+                            </p>
+                          ))
+                        ):(
+                          item.sid === chooseCinema && <div className="no-showtime">
+                           Chưa có xuất chiếu
+                         </div>
+                       )}
                       </div>
                     </div>
                   );
@@ -243,16 +228,20 @@ function BookingTicket({
                 booked={booked}
                 status={status}
                 setStatus={setStatus}
+                price = {price}
+                setPrice ={setPrice}
                 setBookingNum={setBookingNum}
               ></Screen>}
             </div>
           )}
-          <Snacks
-            isActive={true}
-            selectedSnacks={selectedSnacks}
-            setSelectedSnacks={setSelectedSnacks}
-          />
-          <div className="payment">
+          {status.length > 0 &&  (
+            <Snacks
+              isActive={true}
+              selectedSnacks={selectedSnacks}
+              setSelectedSnacks={setSelectedSnacks}
+            />
+          )}
+          {status.length> 0 && <div className="payment">
             <div className="payment-info">
               <p>
                 Số lượng vé: <span>{bookingNum}</span>
@@ -261,7 +250,7 @@ function BookingTicket({
                 Thành tiền:{" "}
                 <span>
                   {numberToString(
-                    bookingNum * 50000 +
+                    price +
                       selectedSnacks.reduce((accumulatedPrice, snack) => {
                         return accumulatedPrice + snack.price * snack.count;
                       }, 0)
@@ -274,7 +263,7 @@ function BookingTicket({
               <p onClick={() => navigate(-1)}>Hủy</p>
               <p onClick={showPayment}>Đặt vé</p>
             </div>
-          </div>
+          </div>}
         </div>
       </div>
     </React.Fragment>

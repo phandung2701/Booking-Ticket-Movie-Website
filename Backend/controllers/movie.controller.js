@@ -13,7 +13,7 @@ const ProvinceModel = require("../models/Province.model");
  * @access  PUBLIC
  */
 exports.all = asyncHandler(async (req, res) => {
-  const movie = await Movie.find();
+  const movie = await Movie.find().sort({createdAt: -1});
 
   res.status(200).json({
     success: true,
@@ -49,7 +49,7 @@ exports.searchName = asyncHandler(async (req, res) => {
 
     return str;
   }
-  const movies = movie.filter((e) => to_slug(e.nameFilm).includes(name));
+  const movies = movie.filter((e) => to_slug(e.name || '').includes(name));
   res.status(200).json({
     success: true,
     films: movies,
@@ -99,7 +99,7 @@ exports.search = asyncHandler(async (req, res, next) => {
     }
     if (genre === "Tất cả" && country !== "Tất cả") {
       return movie.filter((e) =>
-        e.country.toLowerCase().includes(country.toLowerCase())
+        e?.country?.toLowerCase().includes(country?.toLowerCase())
       );
     }
     if (genre === "Tất cả" && country === "Tất cả") {
@@ -158,10 +158,24 @@ exports.create = asyncHandler(async (req, res, next) => {
  */
 exports.detail = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
+  const movie = await Movie.findById(id);
+  
+  if (!movie) {
+    return next(new ErrorResponse("Không tìm thấy phim", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    movie,
+  });
+});
+
+exports.detail_v2 = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
   let date = new Date()
   const movie = await Movie.find({sid : id});
   const cinema = await CinemaModel.find()
-  const showTime = await ShowTimeModel.find({movieId:id,movieDay : {$gt: date.toISOString()}})
+  const showTime = await ShowTimeModel.find({movieId:id,movieDay : {$gte: date.toISOString()}})
   const screen = await ScreenModel.find()
   const province = await ProvinceModel.find()
   if (!movie) {

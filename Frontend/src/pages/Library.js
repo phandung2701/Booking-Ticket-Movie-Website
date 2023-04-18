@@ -19,7 +19,12 @@ import './Library.css';
 
 const Library = () => {
   const auth = useContext(AuthContext);
-
+  const instance = axios.create({
+    baseURL: process.env.REACT_APP_BACKEND_URL,
+    headers: {
+      Authorization: `Bearer ${auth.token}`,
+    },
+  })
   const [error, setError] = useState(null);
   const clearError = () => {
     setError(null);
@@ -32,42 +37,24 @@ const Library = () => {
     setModalIsShown(false);
   };
 
-  const [movieList, setMovieList] = useState([]);
+  const [booked, setBooked] = useState([]);
 
-  const fetchData = () => {
+  const fetchData = async() => {
     const tempArr = [];
     setIsLoading(true);
-    axios({
-      method: 'get',
-      baseURL: process.env.REACT_APP_BACKEND_URL,
-      url: '/v1/ticket',
-      headers: {
-        Authorization: `Bearer ${auth.token}`,
-      },
-    })
-      .then((res) => {
-        if (res.data.ticket.length === 0) {
-          setMovieList([]);
-          setIsLoading(false);
-          return;
-        }
-        res.data.ticket.forEach((ticket) => {
-          axios({
-            method: 'get',
-            baseURL: process.env.REACT_APP_BACKEND_URL,
-            url: `/v1/movie/${ticket.filmId._id}`,
-          }).then((res) => {
-            tempArr.push({ movie: res.data.movie, ticket: ticket });
-            setMovieList((prev) => [...prev, { ...res.data.movie, ...ticket }]);
-          });
-        });
-        // setMovieList([...tempArr]);
+    try{
+      let ticketBooked = await instance.post('/v1/booking/ticket')
+      if (ticketBooked.data.booked.length === 0) {
         setIsLoading(false);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setError(err.response.data.error);
-      });
+        return;
+      }
+      setBooked(ticketBooked.data.booked)
+      setIsLoading(false);
+    }
+    catch(err){
+      console.log(err)
+      setIsLoading(false);
+    }
   };
 
   const [chosenTicket, setChosenTicket] = useState('');
@@ -126,11 +113,7 @@ const Library = () => {
       <div className='library-wrapper'>
         <Navbar tab={3} />
         <Cart
-          movieList={movieList}
-          setIsLoading={setIsLoading}
-          setError={setError}
-          setModalIsShown={setModalIsShown}
-          setChosenTicket={setChosenTicket}
+            booked = {booked}
         />
         <Footer />
       </div>

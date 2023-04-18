@@ -3,7 +3,7 @@ const generateDigitCode = require('../helpers/generateDigitCode');
 const Cinema = require('../models/Cinema.model');
 
 exports.all = asyncHandler(async (req, res, next) => {
-  const cinema = await Cinema.find();
+  const cinema = await Cinema.find().sort({createdAt: -1});
 
   return res.status(200).json({
     success: true,

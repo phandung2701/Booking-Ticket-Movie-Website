@@ -62,11 +62,54 @@
 .table-seat tr > td:first-child > p {
   cursor: pointer;
 }
+.table-seat .vip{
+  background-color: rgba(128, 0, 92,0.6);
+}
+.table-seat .double{
+  background-color: rgba(59, 4, 171,0.4);
+  display: flex;
+}
 .table-seat .selected {
   background-color: #24a8d4;
 }
 .table-seat .disable {
-  background-color: red;
+  background-color: rgba(255, 0, 0,0.7);
   cursor: no-drop;
   opacity: 0.8;
+}
+.note{
+    display: flex;
+    align-items: center;
+    margin : 18px 5px 10px;
+    justify-content: space-between;
+    width: 100%;
+}
+.note div p{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+}
+.rectager{
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+.rectager.normal{
+  background-color: black;
+}
+.rectager.vip{
+  background-color: rgba(128, 0, 92,0.6);
+}
+.rectager.selected{
+  background-color: #24a8d4;
+}
+.rectager.sold{
+  background-color: rgba(255, 0, 0,0.7);
+}
+.rectager.double{
+  background-color: rgba(59, 4, 171,0.4);
 }

@@ -160,6 +160,11 @@
 .address-cinema .header {
   border-bottom: 1px solid #515151;
 }
+.no-showtime{
+  color: linear-gradient(to right, #ff8a00, #ff2070);
+  margin-top: 10px;
+  font-style: oblique;
+}
 .address-cinema .header > h3 {
   font-size: 1.15rem;
   margin-bottom: 20px;

@@ -2,7 +2,13 @@
   margin-bottom: 40px;
   text-transform: capitalize;
 }
-
+.root{
+  cursor: no-drop;
+  padding: 8px 16px;
+  background-color: #10a5a5;
+  color: #fff;
+  border-radius: 5px;
+}
 .page-card {
   padding: 30px;
   margin-bottom: 30px;

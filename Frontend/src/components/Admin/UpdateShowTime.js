@@ -4,8 +4,9 @@ import axios from 'axios';
 import Modal from '../../shared/components/Modal';
 import ErrorModal from '../../shared/components/ErrorModal';
 import DatePicker from 'react-datepicker';
-import TimePicker from 'rc-time-picker';
-import 'rc-time-picker/assets/index.css';
+import TimePicker from 'react-time-picker';
+import 'react-time-picker/dist/TimePicker.css';
+import 'react-clock/dist/Clock.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import './UpdateMovie.css';
@@ -22,7 +23,7 @@ const UpdateShowTime = React.memo(
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
-    const [time, setTime] = useState(new Date());
+    const [time, setTime] = useState('');
     const [movieId, setMovieId] = useState('');
     const [screenId, setScreenId] = useState('');
     const [cinema, setCinema] = useState([]);
@@ -41,8 +42,8 @@ const UpdateShowTime = React.memo(
       if (showTime && action ==='update') {
         setMovieId(showTime.movieId);
         setScreenId(showTime?.screenId);
+        setTime(showTime.time)
         setStartDate(new Date(showTime.movieDay));
-        setStartDate();
       }
     }, [showTime]);
 
@@ -55,23 +56,26 @@ const UpdateShowTime = React.memo(
     const changeNationHandler = (e) => {
       setCinemaId(e.target.value);
     };
-    const onUpdateCinema = () => {
+    const handleTime = (e)=> {
+      setTime(e)
+    }
+    const onUpdateCinema = async() => {
       if (
         movieId === '' ||
-        screenId === ''
+        screenId === ''||time === ''
         ) {
           setError('Oops... Có vẻ bạn thiếu thông tin nào đó');
           return;
         }
         try{
           if(action === 'update'){
-            instance.post('/v1/showTime/update',{sid : showTime.sid,movieId,movieDay:startDate,time,screenId})
+            await instance.post('/v1/showTime/update',{sid : showTime.sid,movieId,movieDay:startDate,time,screenId})
             setShowModal(true);
             setIsLoading(true);
             triggerLoading();
           }
           else if(action === 'create'){
-            instance.post('/v1/showTime/create',{movieId,movieDay:startDate,time,screenId})
+            await instance.post('/v1/showTime/create',{movieId,movieDay:startDate,time,screenId})
             setShowModal(true);
             setIsLoading(true);
             triggerLoading();
@@ -112,6 +116,7 @@ const UpdateShowTime = React.memo(
                 <label className='form-label'>Movie Day</label>
                 <DatePicker
                   selected={startDate}
+                  value={startDate}
                   onChange={(date) => setStartDate(date)}
                   className='form-input'
                   dateFormat="dd/MM/yyyy"
@@ -119,22 +124,7 @@ const UpdateShowTime = React.memo(
               </div>
               <div className='form-group'>
                 <label className='form-label'>Time</label>
-                <TimePicker
-                  selected={new Date(time)}
-                  onChange={(time) => {
-                    const date = new Date(time);
-                    const formattedTime = date.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true });
-                    setTime(formattedTime)
-
-                  }}
-                  className='form-input'
-                  showTimeSelect
-                  showTimeSelectOnly
-                  timeIntervals={15}
-                  dateFormat="hh:mm aa"
-                  timeCaption="Time"
-
-                />
+                <TimePicker onChange={handleTime} value ={time} className='form-input' />
               </div>
               </div>
               <div className='form-group'>

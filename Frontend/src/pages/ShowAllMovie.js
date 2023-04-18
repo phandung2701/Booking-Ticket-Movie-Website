@@ -86,12 +86,11 @@ const ShowAllMovie = () => {
       baseURL: process.env.REACT_APP_BACKEND_URL,
       url: '/v1/movie/search',
       data: {
-        category: category,
+        genre: category,
         country: country,
       },
     })
       .then((res) => {
-        console.log(res.data, country, category);
         if (res.data.films.length === 0) {
           setMovieList([]);
           setIsLoading(false);

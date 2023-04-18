@@ -8,7 +8,7 @@ const UserInfo = ({ user }) => {
         <img src={user.img} alt="" />
       </div> */}
       <div className="user-info__name">
-        <span>Nitflex</span>
+        <span>Cgv</span>
       </div>
     </div>
   );
