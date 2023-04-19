@@ -25,7 +25,7 @@ function MovieIsPlay({ movieList, setStatus, executeScroll }) {
       <h2>Phim đang chiếu</h2>
       <Slider {...settings}>
         {movieList.map((item, index) =>
-          compare_date(new Date(), new Date(item.movieDay)) ? (
+         
             <CardFilm
               key={item._id}
               movieId={item.sid || ''}
@@ -36,7 +36,6 @@ function MovieIsPlay({ movieList, setStatus, executeScroll }) {
               executeScroll={executeScroll}
               movieDay={item.movieDay}
             />
-          ) : null
         )}
       </Slider>
     </div>

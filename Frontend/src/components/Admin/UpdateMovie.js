@@ -27,6 +27,7 @@ const UpdateMovie = React.memo(
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [trailer, setTrailer] = useState('');
+    const [movieTime,setMovieTime] = useState('')
 
     useEffect(() => {
       if (movie) {
@@ -38,7 +39,8 @@ const UpdateMovie = React.memo(
         setCategory(movie.genre);
         setAvatar(movie.avatar);
         setPoster(movie.background);
-        setStartDate(movie?.releaseDate ? new Date(movie.releaseDate) : new Date());
+        setMovieTime(movie.movieTime)
+        setStartDate(new Date(movie?.releaseDate));
         movie.trailer && setTrailer(movie.trailer);
       }
     }, [movie]);
@@ -61,10 +63,9 @@ const UpdateMovie = React.memo(
         actor === '' ||
         director === '' ||
         description === '' ||
-        category === ''
+        category === ''||movieTime ===''
       ) {
         setError('Oops... Có vẻ bạn thiếu thông tin nào đó');
-        console.log('ok');
         return;
       }
 
@@ -86,6 +87,7 @@ const UpdateMovie = React.memo(
           avatar: avatar,
           background: poster,
           trailer: trailer,
+          movieTime
         },
       })
         .then((res) => {
@@ -205,16 +207,29 @@ const UpdateMovie = React.memo(
                 />
               </div>
             </div>
-            <div className='form-group'>
-              <label className='form-label'>Trailer</label>
+            <div className='frame'>
+              <div className='form-group'>
+                <label className='form-label'>Trailer</label>
+                <input
+                  type='text'
+                  name='trailer'
+                  className='form-input'
+                  placeholder='Thêm trailer'
+                  value={trailer}
+                  onChange={(e) => setTrailer(e.target.value)}
+                />
+              </div>
+              <div className='form-group' style={{width:'30%'}}>
+              <label className='form-label'>Movie time</label>
               <input
                 type='text'
                 name='trailer'
                 className='form-input'
-                placeholder='Thêm trailer'
-                value={trailer}
-                onChange={(e) => setTrailer(e.target.value)}
+                placeholder='trailer'
+                value={movieTime}
+                onChange={(e) => setMovieTime(e.target.value)}
               />
+            </div>
             </div>
             <div className='form-group'>
               <label className='form-label'>Mô tả</label>

@@ -119,11 +119,12 @@ exports.search = asyncHandler(async (req, res, next) => {
  */
 exports.create = asyncHandler(async (req, res, next) => {
   const {
-    name,
+    nameFilm,
     description,
     director,
     country,
-    genre,
+    category,
+    movie_time,
     actor,
     releaseDate,
     background,
@@ -132,16 +133,17 @@ exports.create = asyncHandler(async (req, res, next) => {
   } = req.body;
   const movie = await Movie.create({
     sid: generateDigitCode(),
-    name:name, 
+    name:nameFilm, 
     description, 
     director, 
     country, 
-    genre:genre, 
+    genre:category, 
     actor, 
     releaseDate, 
     background, 
     avatar, 
     trailer, 
+    movieTime:movie_time
   });
 
 
@@ -158,7 +160,7 @@ exports.create = asyncHandler(async (req, res, next) => {
  */
 exports.detail = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  const movie = await Movie.findById(id);
+  const movie = await Movie.find({sid:id});
   
   if (!movie) {
     return next(new ErrorResponse("Không tìm thấy phim", 404));

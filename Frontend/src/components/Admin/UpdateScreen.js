@@ -55,7 +55,6 @@ const UpdateScreen = React.memo(
         cinemaId === ''
         ) {
           setError('Oops... Có vẻ bạn thiếu thông tin nào đó');
-          console.log('ok');
           return;
         }
         try{

@@ -30,7 +30,7 @@ function Carousel({ movieList }) {
     cssEase: 'linear',
   };
   const onMovieDetail = (e) => {
-    navigate(`/movie/${e._id}`);
+    navigate(`/movie/${e.sid}`);
   };
   function compare_date(date1, date2) {
     if (date1.valueOf() <= date2.valueOf()) {

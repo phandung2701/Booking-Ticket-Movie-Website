@@ -23,7 +23,7 @@ function AddFilm({ setIsLoading, setError }) {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [trailer, setTrailer] = useState('');
-
+  const [movieTime,setMovieTime] = useState('')
   const createMovieHandler = () => {
     if (
       namefilm === '' ||
@@ -54,7 +54,8 @@ function AddFilm({ setIsLoading, setError }) {
         country: country,
         category: category,
         actor: actor,
-        movieDay: startDate,
+        movie_time:movieTime,
+        releaseDate: startDate,
         avatar: avatar,
         background: poster,
         trailer: trailer,
@@ -71,6 +72,7 @@ function AddFilm({ setIsLoading, setError }) {
         setAvatar('');
         setDescription('');
         setTrailer('');
+        setMovieTime('')
       })
       .catch((err) => {
         setIsLoading(false);
@@ -112,6 +114,7 @@ function AddFilm({ setIsLoading, setError }) {
               id=''
               className='form-input'
               onChange={changeNationHandler}
+              value={country}
             >
               <option value='Việt Nam'>Việt Nam</option>
               <option value='Nga'>Nga</option>
@@ -119,6 +122,7 @@ function AddFilm({ setIsLoading, setError }) {
               <option value='Mỹ'>Mỹ</option>
               <option value='Ukraina'>Trung Quốc</option>
               <option value='Mỹ'>Hàn Quốc</option>
+              <option value='Nhật Bản'>Nhật Bản</option>
             </select>
           </div>
           <div className='form-group'>
@@ -188,16 +192,29 @@ function AddFilm({ setIsLoading, setError }) {
             />
           </div>
         </div>
-        <div className='form-group'>
-          <label className='form-label'>Trailer</label>
-          <input
-            type='text'
-            name='trailer'
-            className='form-input'
-            placeholder='trailer'
-            value={trailer}
-            onChange={(e) => setTrailer(e.target.value)}
-          />
+        <div className='frame'>
+          <div className='form-group'>
+            <label className='form-label'>Trailer</label>
+            <input
+              type='text'
+              name='trailer'
+              className='form-input'
+              placeholder='trailer'
+              value={trailer}
+              onChange={(e) => setTrailer(e.target.value)}
+            />
+          </div> 
+          <div className='form-group' style={{width:'30%'}}>
+            <label className='form-label'>Movie time</label>
+            <input
+              type='text'
+              name='trailer'
+              className='form-input'
+              placeholder='trailer'
+              value={movieTime}
+              onChange={(e) => setMovieTime(e.target.value)}
+            />
+          </div>
         </div>
         <div className='form-group'>
           <label className='form-label'>Description</label>

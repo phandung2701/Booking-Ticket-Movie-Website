@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import './FilmDetail.css';
+import { formatDate } from '../utils';
 
 function FilmDetail({ movieId, setIsLoading, setError, setStatus, status }) {
   const [movie, setMovie] = useState({});
@@ -18,7 +19,7 @@ function FilmDetail({ movieId, setIsLoading, setError, setStatus, status }) {
       url: `/v1/movie/${movieId}`,
     })
       .then((res) => {
-        setMovie(res.data.movie);
+        setMovie(res.data.movie[0]);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -36,7 +37,6 @@ function FilmDetail({ movieId, setIsLoading, setError, setStatus, status }) {
     }
     setShowTrailer(false);
   };
-console.log(movie)
   return (
     <div className='film-container'>
       <div className='poster-film'>
@@ -62,7 +62,7 @@ console.log(movie)
         <img src={movie.avatar} alt='' />
         <div className='detail'>
           <h2>{movie?.name}</h2>
-          <Link to={`/booking/${movieId}`}>
+          <Link to={`/booking/${movie.sid}`}>
             <p>Đặt vé</p>
           </Link>
           <div className='content-film'>
@@ -74,7 +74,7 @@ console.log(movie)
               <p>
                 Phát hành:{' '}
                 <span>
-                  {new Date((movie?.releaseDate? movie?.releaseDate : new Date() )).toLocaleString().split(',')[0]}
+                  {formatDate(movie.releaseDate)}
                 </span>
               </p>
               <p>
@@ -82,6 +82,9 @@ console.log(movie)
               </p>
               <p>
                 Quốc gia: <span>{movie.country}</span>
+              </p>
+              <p>
+                Thời lượng: <span>{movie.movieTime} phút</span>
               </p>
             </div>
             <div className='content-film-2'>

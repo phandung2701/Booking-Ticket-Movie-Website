@@ -102,7 +102,6 @@ function ShowTime() {
   };
   const handleDeleteShowTime = async(e)=>{
     try{
-      console.log(e)
       if(window.confirm("Are you sure you want to delete showtime?") == true){
         await instance.post('/v1/showTime/delete',{sid:e.sid})
         triggerLoading()

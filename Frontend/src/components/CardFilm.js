@@ -31,13 +31,7 @@ function CardFilm({
     <div className='card-film'>
       <div className='card-film-image'>
         <img src={poster} alt='' />
-        {compare_date(new Date(), new Date(movieDay)) ? (
-          <p onClick={handleNavigate}>Chi tiết</p>
-        ) : (
-          <div className='premiered'>
-            <span className=''>Đã công chiếu</span>
-          </div>
-        )}
+        <p onClick={handleNavigate}>Chi tiết</p>
       </div>
       <div className='card-film-content'>
         <h3>{movieName}</h3>

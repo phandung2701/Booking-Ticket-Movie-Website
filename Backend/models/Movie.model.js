@@ -30,6 +30,9 @@ const MovieSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
+    movieTime: {
+      type: String,
+    },
     background: {
       type: String,
     },

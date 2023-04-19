@@ -7,9 +7,8 @@ import "./BookingTicket.css";
 import { AuthContext } from "../shared/context/auth-context";
 import axios from "axios";
 import Snacks from "./Snacks";
-import { numberToString } from "../utils";
-import Modal from "../shared/components/Modal";
-import Button from "../shared/components/Button";
+import { formatDate, numberToString } from "../utils";
+
 
 function BookingTicket({
   movie,
@@ -44,7 +43,6 @@ function BookingTicket({
   const [chooseShowTime,setChooseShowTime] = useState('')
   const [listCinema,setListCinema] = useState([])
   const [listShowTime,setListShowTime] = useState([])
-
   const convertDate = (timeList)=>{
     let dayList = timeList.reduce((acc,cur)=>{
       let time = acc.find(ele => ele.day == new Date(cur.movieDay).getDate())
@@ -142,12 +140,16 @@ function BookingTicket({
   }
   const handleChooseCinema = (item)=>{
     let listScreen = screen.filter(ele => ele.cinemaId === item.sid).reduce((acc,cur)=> ([...acc,cur.sid]),[])
-    let showTimeList = showTime.filter(ele => listScreen.includes(ele.screenId))
+    let showTimeList = showTime.filter(ele => (listScreen.includes(ele.screenId) 
+    && new Date(ele.movieDay).getDate() == chooseDay.day 
+    && new Date(ele.movieDay).getMonth()+1 == chooseDay.month
+    && new Date(ele.movieDay).getFullYear() == chooseDay.year))
     setListShowTime(showTimeList)
     setChooseCinema(item.sid)
   }
   const handleChooseDay = (item)=>{
       setChooseDay(item)
+      setChooseCinema('')
   }
   return (
     <React.Fragment>
@@ -163,10 +165,11 @@ function BookingTicket({
           <p>{movie?.name}</p>
           <p>
             Phát hành :{" "}
-            {new Date(movie?.releaseDate).toLocaleString().split(",")[0]}
+            {formatDate(movie?.releaseDate)}
           </p>
         </div>
         <h2>Đặt vé xem phim</h2>
+        {convertDate(showTime).length > 0? 
         <div className="booking-ticket">
         <h3>Chọn ngày</h3>
         <div className="choose-day">
@@ -265,6 +268,10 @@ function BookingTicket({
             </div>
           </div>}
         </div>
+        : (
+          <div>Hiện phim chưa có lịch chiếu chiếu</div>
+        )  
+      }
       </div>
     </React.Fragment>
   );

@@ -21,13 +21,6 @@ function BoxActor() {
           />
           <p>Triệu Lệ Dĩnh</p>
         </div>
-        <div className='actor-item'>
-          <img
-            src='https://tenhaynhat.com/wp-content/uploads/2019/05/dich-le-nhiet-ba-1.jpg'
-            alt=''
-          />
-          <p>Địch Lệ Nhiệt Ba</p>
-        </div>
       </div>
     </div>
   );

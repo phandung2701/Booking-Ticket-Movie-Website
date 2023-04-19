@@ -125,7 +125,7 @@ function Screen() {
         </div>
         {movie?.length > 0 && flag ? (
           <Table
-            limit='5'
+            limit='10'
             headData={customerTableHead}
             renderHead={(item, index) => renderHead(item, index)}
             renderBody={(item, index) => renderBody(item, index)}
