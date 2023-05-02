@@ -13,7 +13,7 @@ function Account() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const customerTableHead = ['STT', 'UserName', 'email', 'Quyền', 'Phân quyền'];
+  const customerTableHead = ['STT', 'UserName', 'Email', 'Role', 'Decentralization'];
   useEffect(() => {
     const fetchData = async () => {
       axios({

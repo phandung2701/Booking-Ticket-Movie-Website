@@ -22,7 +22,7 @@ const MovieSchema = new mongoose.Schema(
       required: [true, "Đạo diễn của phim không được để trống"],
     },
     genre: {
-      type:String
+      type:Array
     },
     releaseDate : {
       type:String
@@ -49,8 +49,10 @@ const MovieSchema = new mongoose.Schema(
     },
     country: {
       type: String,
-      required: [true, "Quốc gia không được để trống"],
     },
+    age:{
+      type:String
+    }
   },
   { timestamps: true }
 );

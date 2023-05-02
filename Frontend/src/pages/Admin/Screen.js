@@ -88,7 +88,7 @@ function Screen() {
       <td>{index + 1}</td>
       <td>{item.sid}</td>
       <td>{item.name}</td>
-      <td>{item.cinemaId}</td>
+      <td>{item.cinema[0].name}</td>
 
       <td>
         <span className='update' onClick={() => onUpdateScreen(item)}>

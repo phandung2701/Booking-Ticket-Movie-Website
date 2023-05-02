@@ -8,6 +8,7 @@ import UpdateMovie from '../../components/Admin/UpdateMovie';
 import './Movies.css';
 import ModalShowTicket from '../../components/Admin/ModalShowTicket';
 import ModalCancelTicket from '../../components/Admin/ModalCancelTicket';
+import { formatDate } from '../../utils';
 function Movies() {
   const auth = useContext(AuthContext);
   const [movie, setMovie] = useState([]);
@@ -79,9 +80,9 @@ function Movies() {
       <td>{item.name}</td>
       <td>{item.director}</td>
       <td>{item.actor}</td>
-      <td>{item.genre}</td>
-      <td>{item.country}</td>
-      <td>{item.releaseDate}</td>
+      <td>{item.genre_info.map((ele)=> ele.name+',')}</td>
+      <td>{item.country_info[0].name}</td>
+      <td>{formatDate(item.releaseDate)}</td>
 
       <td>
         <span className='update' onClick={() => onUpdateMovie(item)}>

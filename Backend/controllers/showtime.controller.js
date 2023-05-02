@@ -3,7 +3,26 @@ const generateDigitCode = require('../helpers/generateDigitCode');
 const ShowTime = require('../models/ShowTime.model');
 
 exports.all = asyncHandler(async (req, res, next) => {
-  const showTime = await ShowTime.find().sort({createdAt: -1});
+  const showTime = await ShowTime.aggregate([
+    {
+      $lookup:
+        {
+          from: "movies",
+          localField: "movieId",
+          foreignField: "sid",
+          as: "movie"
+        }
+    },
+    {
+      $lookup:
+        {
+          from: "screens",
+          localField: "screenId",
+          foreignField: "sid",
+          as: "screen"
+        }
+    },
+  ]).sort({createdAt: -1});
 
   return res.status(200).json({
     success: true,

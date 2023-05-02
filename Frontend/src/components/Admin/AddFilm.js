@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { AuthContext } from '../../shared/context/auth-context';
 import axios from 'axios';
@@ -9,21 +9,37 @@ import './AddFilm.css';
 
 function AddFilm({ setIsLoading, setError }) {
   const auth = useContext(AuthContext);
-
+  const instance = axios.create({
+    baseURL: process.env.REACT_APP_BACKEND_URL,
+    headers: {
+      Authorization: `Bearer ${auth.token}`,
+    },
+  })
   const [showModal, setShowModal] = useState(false);
-
+  const [listC,setListC] = useState([])
+  const [listGenre,setListGenre] = useState([])
   const [startDate, setStartDate] = useState(new Date());
 
   const [namefilm, setNameFilm] = useState('');
-  const [country, setCountry] = useState('Việt Nam');
+  const [country, setCountry] = useState('');
   const [poster, setPoster] = useState('');
+  const [age,setAge] = useState('')
   const [avatar, setAvatar] = useState('');
   const [actor, setActor] = useState('');
   const [director, setDirector] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState([]);
   const [trailer, setTrailer] = useState('');
   const [movieTime,setMovieTime] = useState('')
+  useEffect(()=>{
+    const getList = async()=>{
+      let listCountry = await instance.get('/v1/country')
+      let listGenre = await instance.get('/v1/movieGenre')
+      setListC(listCountry.data.country)
+      setListGenre(listGenre.data.movieGenre)
+    }
+    getList()
+  },[])
   const createMovieHandler = () => {
     if (
       namefilm === '' ||
@@ -55,6 +71,7 @@ function AddFilm({ setIsLoading, setError }) {
         category: category,
         actor: actor,
         movie_time:movieTime,
+        age:age,
         releaseDate: startDate,
         avatar: avatar,
         background: poster,
@@ -65,18 +82,19 @@ function AddFilm({ setIsLoading, setError }) {
         setIsLoading(false);
         setShowModal(true);
         setActor('');
-        setCategory('');
+        setCategory([]);
         setNameFilm('');
         setDirector('');
         setPoster('');
         setAvatar('');
+        setAge('')
         setDescription('');
         setTrailer('');
         setMovieTime('')
       })
       .catch((err) => {
         setIsLoading(false);
-        setError(err.response.data.error);
+        setError("Create failed!!");
       });
   };
 
@@ -87,7 +105,14 @@ function AddFilm({ setIsLoading, setError }) {
   const changeNationHandler = (e) => {
     setCountry(e.target.value);
   };
-
+  const handleGenre = (e)=> {
+    if(category.includes(e.target.value)) return
+    setCategory([...category,e.target.value])
+  }
+  const handleDeleteGenre = (sid)=>{
+    let newCategory = category.filter((genre)=> genre !== sid)
+    setCategory(newCategory)
+  }
   return (
     <React.Fragment>
       <Modal onCancel={closeModal} header='Thông báo' show={showModal}>
@@ -116,13 +141,12 @@ function AddFilm({ setIsLoading, setError }) {
               onChange={changeNationHandler}
               value={country}
             >
-              <option value='Việt Nam'>Việt Nam</option>
-              <option value='Nga'>Nga</option>
-              <option value='Ukraina'>Ukraina</option>
-              <option value='Mỹ'>Mỹ</option>
-              <option value='Ukraina'>Trung Quốc</option>
-              <option value='Mỹ'>Hàn Quốc</option>
-              <option value='Nhật Bản'>Nhật Bản</option>
+              <option value="" >Choose country</option>
+              {
+                listC.map((ele)=>(
+                  <option value={ele.sid} key={ele.sid}>{ele.name}</option>
+                ))
+              }
             </select>
           </div>
           <div className='form-group'>
@@ -142,6 +166,7 @@ function AddFilm({ setIsLoading, setError }) {
               placeholder='poster'
               name='poster'
               className='form-input'
+              value={poster}
               onChange={(e) => setPoster(e.target.value)}
             />
           </div>
@@ -153,6 +178,7 @@ function AddFilm({ setIsLoading, setError }) {
               name='avatar'
               className='form-input'
               placeholder='avatar'
+              value={avatar}
               onChange={(e) => setAvatar(e.target.value)}
             />
           </div>
@@ -181,15 +207,46 @@ function AddFilm({ setIsLoading, setError }) {
             />
           </div>
           <div className='form-group'>
-            <label className='form-label'>Genre</label>
-            <input
-              type='text'
-              name='category'
+            <label className='form-label'>Age</label>
+            <select
+              name='country'
+              id=''
               className='form-input'
-              placeholder='genre'
+              onChange={(e)=> setAge(e.target.value)}
+              value={age}
+            >
+              <option value="all" >All</option>
+              <option value="18" >18+</option>
+              <option value="13" >13+</option>
+              <option value="7" >7+</option>
+            </select>
+          </div>
+        </div>
+        <div className='frame'>
+        <div className='form-group' style={{width:'30%'}}>
+            <label className='form-label'>Genre</label>
+            <select
+              name='country'
+              id=''
+              className='form-input'
+              onChange={handleGenre}
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
+            >
+              <option value="" >Choose Genre</option>
+              {
+                listGenre.map((ele)=>(
+                  <option value={ele.sid} key = {ele.sid} >{ele.name}</option>
+                ))
+              }
+            </select>
+          </div>
+          <div style={{width:'70%'}} className='box-tag-genre'>
+            {category.map((ele)=>(
+               <p className='tag-genre' key={ele}>
+               <span style={{marginRight : "4px"}}>{listGenre.filter((genre) => genre.sid === ele)[0]?.name}</span>
+               <i className="bx bx-x" style={{cursor:"pointer"}} onClick={()=>handleDeleteGenre(ele)}></i>
+              </p>
+            ))}
           </div>
         </div>
         <div className='frame'>

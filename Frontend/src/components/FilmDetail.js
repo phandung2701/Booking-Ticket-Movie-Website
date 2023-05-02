@@ -78,10 +78,10 @@ function FilmDetail({ movieId, setIsLoading, setError, setStatus, status }) {
                 </span>
               </p>
               <p>
-                Thể loại: <span>{movie?.genre}</span>
+                Thể loại: <span>{movie?.genre_info?.map(ele => ele.name+', ')}</span>
               </p>
               <p>
-                Quốc gia: <span>{movie.country}</span>
+                Quốc gia: <span>{movie?.country_info ? movie.country_info[0].name : movie.country }</span>
               </p>
               <p>
                 Thời lượng: <span>{movie.movieTime} phút</span>

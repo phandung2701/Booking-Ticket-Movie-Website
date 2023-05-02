@@ -12,10 +12,16 @@ import './UpdateMovie.css';
 const UpdateMovie = React.memo(
   ({ movie, setShowFormUpdate, triggerLoading, setIsLoading, setFlag }) => {
     const auth = useContext(AuthContext);
-
+    const instance = axios.create({
+      baseURL: process.env.REACT_APP_BACKEND_URL,
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+      },
+    })
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState(null);
-
+    const [listC,setListC] = useState([])
+    const [listGenre,setListGenre] = useState([])
     const [startDate, setStartDate] = useState(new Date());
 
     const [name, setNameFilm] = useState('');
@@ -25,10 +31,19 @@ const UpdateMovie = React.memo(
     const [actor, setActor] = useState('');
     const [director, setDirector] = useState('');
     const [description, setDescription] = useState('');
-    const [category, setCategory] = useState('');
+    const [age,setAge] = useState('all')
+    const [category, setCategory] = useState([]);
     const [trailer, setTrailer] = useState('');
     const [movieTime,setMovieTime] = useState('')
-
+    useEffect(()=>{
+      const getList = async()=>{
+        let listCountry = await instance.get('/v1/country')
+        let listGenre = await instance.get('/v1/movieGenre')
+        setListC(listCountry.data.country)
+        setListGenre(listGenre.data.movieGenre)
+      }
+      getList()
+    },[])
     useEffect(() => {
       if (movie) {
         setNameFilm(movie.name);
@@ -40,6 +55,7 @@ const UpdateMovie = React.memo(
         setAvatar(movie.avatar);
         setPoster(movie.background);
         setMovieTime(movie.movieTime)
+        setAge(movie?.age ??'all')
         setStartDate(new Date(movie?.releaseDate));
         movie.trailer && setTrailer(movie.trailer);
       }
@@ -63,7 +79,7 @@ const UpdateMovie = React.memo(
         actor === '' ||
         director === '' ||
         description === '' ||
-        category === ''||movieTime ===''
+        movieTime ===''
       ) {
         setError('Oops... Có vẻ bạn thiếu thông tin nào đó');
         return;
@@ -82,6 +98,7 @@ const UpdateMovie = React.memo(
           director: director,
           country: country,
           genre: category,
+          age:age,
           actor: actor,
           releaseDate: startDate,
           avatar: avatar,
@@ -100,6 +117,14 @@ const UpdateMovie = React.memo(
         });
       setShowFormUpdate(false);
     };
+    const handleGenre = (e)=> {
+      if(category.includes(e.target.value)) return
+      setCategory([...category,e.target.value])
+    }
+    const handleDeleteGenre = (sid)=>{
+      let newCategory = category.filter((genre)=> genre !== sid)
+      setCategory(newCategory)
+    }
     return (
       <Fragment>
         <ErrorModal error={error} onClear={clearError} />
@@ -122,22 +147,22 @@ const UpdateMovie = React.memo(
                 />
               </div>
               <div className='form-group'>
-                <label className='form-label'>Quốc gia</label>
-                <select
-                  name='country'
-                  id=''
-                  className='form-input'
-                  onChange={changeNationHandler}
-                  defaultValue={movie.country}
-                >
-                  <option value='Việt Nam'>Việt Nam</option>
-                  <option value='Nga'>Nga</option>
-                  <option value='Ukraina'>Ukraina</option>
-                  <option value='Mỹ'>Mỹ</option>
-                  <option value='Hàn Quốc'>Hàn Quốc</option>
-                  <option value='Trung Quốc'>Trung Quốc</option>
-                </select>
-              </div>
+            <label className='form-label'>Country</label>
+            <select
+              name='country'
+              id=''
+              className='form-input'
+              onChange={changeNationHandler}
+              value={country}
+            >
+              <option value="" >Choose country</option>
+              {
+                listC.map((ele)=>(
+                  <option value={ele.sid} key={ele.sid}>{ele.name}</option>
+                ))
+              }
+            </select>
+          </div>
               <div className='form-group'>
                 <label className='form-label'>Ngày phát hành</label>
                 <DatePicker
@@ -196,17 +221,49 @@ const UpdateMovie = React.memo(
                 />
               </div>
               <div className='form-group'>
-                <label className='form-label'>Thể loại</label>
-                <input
-                  type='text'
-                  name='category'
-                  className='form-input'
-                  placeholder='Nhập thể loại'
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                />
-              </div>
+            <label className='form-label'>Age</label>
+            <select
+              name='country'
+              id=''
+              className='form-input'
+              onChange={(e) => {
+                setAge(e.target.value);
+              }}
+              value={age}
+            >
+              <option value="all" >All</option>
+              <option value="18" >18+</option>
+              <option value="13" >13+</option>
+            </select>
+          </div>
             </div>
+            <div className='frame'>
+        <div className='form-group' style={{width:'30%'}}>
+            <label className='form-label'>Genre</label>
+            <select
+              name='country'
+              id=''
+              className='form-input'
+              onChange={handleGenre}
+              value={category}
+            >
+              <option value="" >Choose Genre</option>
+              {
+                listGenre.map((ele)=>(
+                  <option value={ele.sid} key = {ele.sid} >{ele.name}</option>
+                ))
+              }
+            </select>
+          </div>
+          <div style={{width:'70%'}} className='box-tag-genre'>
+            {category?.map((ele)=>(
+               <p className='tag-genre' key={ele}>
+               <span style={{marginRight : "4px"}}>{listGenre.filter((genre) => genre.sid === ele)[0]?.name}</span>
+               <i className="bx bx-x" style={{cursor:"pointer"}} onClick={()=>handleDeleteGenre(ele)}></i>
+              </p>
+            ))}
+          </div>
+        </div>
             <div className='frame'>
               <div className='form-group'>
                 <label className='form-label'>Trailer</label>

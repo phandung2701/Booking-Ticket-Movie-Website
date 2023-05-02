@@ -12,6 +12,7 @@ function CardFilm({
   executeScroll,
   movieDay,
   setStatus,
+  movie
 }) {
   const navigate = useNavigate();
   const handleNavigate = () => {
@@ -29,13 +30,16 @@ function CardFilm({
 
   return (
     <div className='card-film'>
+      <div className='movie-age'>
+          <p>{movie?.age === 'all' ?movie?.age : movie?.age+'+' }</p>
+      </div>
       <div className='card-film-image'>
         <img src={poster} alt='' />
         <p onClick={handleNavigate}>Chi tiết</p>
       </div>
       <div className='card-film-content'>
         <h3>{movieName}</h3>
-        <p>{category}</p>
+        <p>{category.map(ele => ele.name+ ",")}</p>
       </div>
     </div>
   );

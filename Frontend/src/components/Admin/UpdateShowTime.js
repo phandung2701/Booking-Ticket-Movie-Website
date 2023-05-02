@@ -26,14 +26,19 @@ const UpdateShowTime = React.memo(
     const [time, setTime] = useState('');
     const [movieId, setMovieId] = useState('');
     const [screenId, setScreenId] = useState('');
-    const [cinema, setCinema] = useState([]);
+    const [movieList, setMovieList] = useState([]);
+    const [screenList, setScreenList] = useState([]);
     const [cinemaId,setCinemaId] = useState('');
   
     useEffect(()=>{
         const fetchCinema = async()=>{
-          const cinemaList = await instance.get('/v1/cinema')
-          if(cinemaList.data.success){
-              setCinema(cinemaList.data.cinema)
+          const screen = await instance.get('/v1/screen')
+          const movie = await instance.get('/v1/movie')
+          if(movie.data.success){
+            let startMovie = movie.data.films.filter(ele =>new Date(ele.releaseDate) < new Date()) 
+            setMovieList(startMovie)
+            setScreenList(screen.data.screen)
+
           }
         }
         fetchCinema()
@@ -101,15 +106,18 @@ const UpdateShowTime = React.memo(
               <div className='form-group' style={{
                 display : 'block'
               }}>
-                <label className='form-label'>Movie ID</label>
-                <input
-                  type='text'
-                  name='nameFilm'
+                <label className='form-label'>Movie</label>
+                <select
+                  name='address'
+                  id=''
                   className='form-input'
-                  placeholder='cinema name'
-                  value={movieId}
                   onChange={(e) => setMovieId(e.target.value)}
-                />
+                  value={movieId}
+                >
+                  {movieList.map((ele)=>(
+                    <option value={ele.sid}>{ele.name}</option>
+                  ))}
+                </select>
               </div>
               <div className='frame'>
               <div className='form-group'>
@@ -128,15 +136,18 @@ const UpdateShowTime = React.memo(
               </div>
               </div>
               <div className='form-group'>
-                <label className='form-label'>Screen ID</label>
-                <input
-                  type='text'
-                  name='screen id'
+                <label className='form-label'>Screen</label>
+                <select
+                  name='address'
+                  id=''
                   className='form-input'
-                  placeholder='Screen ID'
-                  value={screenId}
                   onChange={(e) => setScreenId(e.target.value)}
-                />
+                  value={screenId}
+                >
+                  {screenList.map((ele)=>(
+                    <option value={ele.sid}>{ele.name}</option>
+                  ))}
+                </select>
               </div>
             <div className='btn-check'>
               <p onClick={onUpdateCinema}>{action}</p>

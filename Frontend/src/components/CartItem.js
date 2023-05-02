@@ -48,7 +48,7 @@ const CartItem = ({
               Chỗ ngồi: {ticket?.seat.map(((st,idx) =><span key={idx}>{st},</span>))}
             </p>
             <p>
-              Giá: <span>{numberToString(ticket?.price)} VND</span>
+              Giá: <span>{numberToString(ticket?.price)}₫</span>
             </p>
           </div>
           <div>

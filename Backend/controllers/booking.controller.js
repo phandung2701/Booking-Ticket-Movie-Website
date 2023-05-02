@@ -4,7 +4,17 @@ const BookingModel = require('../models/Booking.model');
 const CustomerModel = require('../models/Customer.model');
 
 exports.all = asyncHandler(async (req, res, next) => {
-  const booked = await BookingModel.find();
+  const booked = await BookingModel.aggregate([
+    {
+      $lookup:
+        {
+          from: "customers",
+          localField: "customerId",
+          foreignField: "sid",
+          as: "customer"
+        }
+    },
+  ]).sort({createdAt: -1});
 
   return res.status(200).json({
     success: true,
@@ -42,6 +52,33 @@ exports.bookingTicket = asyncHandler(async (req, res, next) => {
     comboId,
     seat 
   });
+
+  return res.status(200).json({
+    success: true,
+    booking
+    
+  });
+});
+
+exports.searchTicket = asyncHandler(async (req, res, next) => {
+  const {cinema,movie,movieDay,time} = req.body
+  let filter  = {}
+  if(cinema) filter["cinema"] = { $elemMatch : {sid:cinema}}
+  if(movie) filter["movie"]= { $elemMatch : {sid:movie}}
+  if(movieDay) filter["movieDay"] = {$eq : movieDay}
+  if(time) filter["time"] = time
+  const booking = await BookingModel.aggregate([
+    {
+      $lookup:
+        {
+          from: "customers",
+          localField: "customerId",
+          foreignField: "sid",
+          as: "customer"
+        }
+    },
+    {$match : filter}
+  ]).sort({createdAt: -1});
 
   return res.status(200).json({
     success: true,

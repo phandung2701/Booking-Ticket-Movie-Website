@@ -8,7 +8,7 @@
   margin: 0 auto;
 }
 
-.allmovie > h3 {
+.title-movie p.active {
   font-size: 1.25rem;
   padding: 10px 0;
   color: #a5cbef;
@@ -19,6 +19,16 @@
   box-decoration-break: clone;
   margin-bottom: 20px;
   margin-top: 20px;
+}
+
+.title-movie p{
+  color: #cccccc;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.title-movie p:hover{
+  color: #fff;
 }
 .table__pagination {
   display: flex;

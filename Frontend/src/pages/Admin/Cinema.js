@@ -90,7 +90,7 @@ function Cinema() {
       <td>{item.sid}</td>
       <td>{item.name}</td>
       <td>{item.address}</td>
-      <td>{item.provinceId}</td>
+      <td>{item.province[0].name}</td>
       <td>
         <span className='update' onClick={() => onUpdateCinema(item)}>
           update

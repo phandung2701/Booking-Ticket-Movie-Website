@@ -24,6 +24,12 @@ const sidebarNav = [
     text: 'Account',
   },
   {
+    link: 'ticket',
+    section: 'Ticket',
+    icon: <i className="bx bx-user"></i>,
+    text: 'Ticket',
+  },
+  {
     link: 'cinema',
     section: 'Cinema',
     icon: <i className="bx bx-camera-movie"></i>,

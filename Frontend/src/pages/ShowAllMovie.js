@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState,useContext, useEffect } from 'react';
 
 import { useParams, useLocation } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import AllMovie from '../components/AllMovie';
 
 import LoadingSpinner from '../shared/components/LoadingSpinner';
 import ErrorModal from '../shared/components/ErrorModal';
-
+import { AuthContext } from "../shared/context/auth-context";
 import axios from 'axios';
 
 import './Movie.css';
@@ -20,19 +20,32 @@ const ShowAllMovie = () => {
     setError(null);
   };
   const [isLoading, setIsLoading] = useState(false);
-  const [country, setCountry] = useState('Tất cả');
-
+  const [country, setCountry] = useState('');
+  const [listC,setListC] = useState([])
+  const [listGenre,setListGenre] = useState([])
   const [movieList, setMovieList] = useState([]);
   const location = useLocation();
-  const [category, setCategory] = useState('Tất cả');
+  const [category, setCategory] = useState('');
+  const [activeTab,setActiveTab] = useState(1)
   const param = useParams();
-
-  useEffect(() => {
-    if (param.movieName !== undefined) {
-      fetchData();
-    } else {
-      fetchData2();
+  const auth = useContext(AuthContext);
+  const instance = axios.create({
+    baseURL: process.env.REACT_APP_BACKEND_URL,
+    headers: {
+      Authorization: `Bearer ${auth.token}`,
+    },
+  })
+  useEffect(()=>{
+    const getList = async()=>{
+      let listCountry = await instance.get('/v1/country')
+      let listGenre = await instance.get('/v1/movieGenre')
+      setListC(listCountry.data.country)
+      setListGenre(listGenre.data.movieGenre)
     }
+    getList()
+  },[])
+  useEffect(() => {
+    fetchData2()
   }, [location]);
   const fetchData = () => {
     setIsLoading(true);
@@ -91,7 +104,7 @@ const ShowAllMovie = () => {
       },
     })
       .then((res) => {
-        if (res.data.films.length === 0) {
+        if (res?.data?.films?.length === 0) {
           setMovieList([]);
           setIsLoading(false);
           return;
@@ -101,9 +114,36 @@ const ShowAllMovie = () => {
       })
       .catch((err) => {
         setIsLoading(false);
-        setError(err.response.data.error);
+        setError(err.response?.data?.error);
       });
   };
+  const handleMovie = (type,tab)=>{
+    setIsLoading(true);
+    setActiveTab(tab)
+    axios({
+      method: 'post',
+      baseURL: process.env.REACT_APP_BACKEND_URL,
+      url: '/v1/movie/search',
+      data: {
+        genre: category,
+        country: country,
+        type
+      },
+    })
+      .then((res) => {
+        if (res?.data?.films?.length === 0) {
+          setMovieList([]);
+          setIsLoading(false);
+          return;
+        }
+        setMovieList(res.data.films);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setError(err.response?.data?.error);
+      });
+  }
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
@@ -119,29 +159,12 @@ const ShowAllMovie = () => {
                 name='country'
                 id=''
                 className='form-input-search'
-                onClick={(e) => setCategory(e.target.value)}
+                onChange={(e) => setCategory(e.target.value)}
               >
-                <option value='Tất cả'>Tất cả</option>
-
-                <option value='Tâm Lý - Tình Cảm'> Tâm Lý - Tình Cảm</option>
-                <option value='Cổ Trang - Thần Thoại'>
-                  Cổ Trang - Thần Thoại
-                </option>
-                <option value='Thể Thao - Âm Nhạc'>Thể Thao - Âm Nhạc</option>
-                <option value='Gia Đình - Học Đường'>
-                  Gia Đình - Học Đường
-                </option>
-                <option value='Hình Sự - Chiến Tranh'>
-                  Hình Sự - Chiến Tranh
-                </option>
-                <option value='Phiêu Lưu - Hành Động'>
-                  Phiêu Lưu - Hành Động
-                </option>
-                <option value='Khoa Học - Viễn Tưởng'>
-                  Khoa Học - Viễn Tưởng
-                </option>
-                <option value='Hài Hước'>Hài Hước</option>
-                <option value='Hoạt Hình'>Hoạt Hình</option>
+                <option value=''>Tất cả</option>
+                {listGenre.map((ele)=>(
+                <option value={ele.sid} key={ele.sid}>{ele.name}</option>
+                ))}
               </select>
             </div>
             <div className='search-category'>
@@ -152,27 +175,17 @@ const ShowAllMovie = () => {
                 className='form-input-search'
                 onClick={(e) => setCountry(e.target.value)}
               >
-                <option value='Tất cả'>Tất cả</option>
-                <option value='Việt Nam'>Việt Nam</option>
-                <option value='Hàn Quốc'>Hàn Quốc</option>
-                <option value='Nhật Bản'>Nhật Bản</option>
-
-                <option value='Trung Quốc'>Trung Quốc</option>
-                <option value='Mỹ'>Mỹ</option>
-                <option value='Nga'>Nga</option>
+                <option value=''>Tất cả</option>
+                {listC.map((ele)=>(
+                <option value={ele.sid} key={ele.sid}>{ele.name}</option>
+                ))}
               </select>
             </div>
 
             <p onClick={handleMovieSearch}>Tìm kiếm</p>
           </div>
         </div>
-        {movieList.length > 0 ? (
-          <AllMovie movieList={movieList} limit={10} />
-        ) : (
-          <div className='empty-movie'>
-            <p>không tìm thấy phim</p>
-          </div>
-        )}
+          <AllMovie movieList={movieList} limit={10} handleMovie={handleMovie} activeTab={activeTab}/>
         <Footer />
       </div>
     </React.Fragment>

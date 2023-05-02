@@ -1,8 +1,37 @@
 .card-film {
   width: 210px;
+  position: relative;
 }
 .card-film-image {
   position: relative;
+}
+.movie-age{
+  position: absolute;
+  left: 15px;
+  top: -8px;
+  width: 35px;
+  height: 32px;
+  background-color: #dc1a22;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.movie-age::before{
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -6px;
+  border-top: 9px solid transparent;
+  border-right: 7px solid rgba(220, 26, 34,0.6);
+}
+.movie-age p{
+    color: #fff;
+    font-family: sans-serif;
+    font-weight: bold;
 }
 .card-film-image img {
   width: 210px;

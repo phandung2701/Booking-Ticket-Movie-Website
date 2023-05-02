@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import CardFilm from './CardFilm';
 
 import './AllMovie.css';
 function AllMovie(props) {
   const [dataShow, setDataShow] = useState([]);
+  
   useEffect(() => {
     const initDataShow =
       props.limit && props.movieList
@@ -34,26 +35,34 @@ function AllMovie(props) {
     setCurrPage(page);
   };
   return (
+ 
     <div className='allmovie'>
-      <h3>Tất cả phim</h3>
-
-      <div className='movieList'>
-        {dataShow.length > 0 ? (
-          dataShow.map((movie, index) => (
-            <CardFilm
-              key={movie._id}
-              movieId={movie?.sid || ''}
-              poster={movie.avatar}
-              movieName={movie?.name || ''}
-              category={movie?.genre||''}
-              executeScroll={props.executeScroll}
-              movieDay={movie?.releaseDate|| new Date()}
-            />
-          ))
-        ) : (
-          <p>Hiện tại không có phim nào được công chiếu</p>
-        )}
-      </div>
+         <div style={{display : 'flex',alignItems:'center'}} className='title-movie'>
+    <p className={props.activeTab == 1 && "active"} onClick={()=>props.handleMovie('',1)}>Tất cả phim</p>
+    <p className={props.activeTab == 2 && "active"} onClick={()=>props.handleMovie('lte',2)}>Phim đang chiếu</p>
+    <p className={props.activeTab == 3 && "active"} onClick={()=>props.handleMovie('gt',3)}>Phim Sắp chiếu</p>
+  </div>
+      { props.movieList.length >0? (
+     
+     <Fragment>
+     <div className='movieList'>
+       {dataShow.length > 0 ? (
+         dataShow.map((movie, index) => (
+           <CardFilm
+             key={movie._id}
+             movieId={movie?.sid || ''}
+             poster={movie.avatar}
+             movieName={movie?.name || ''}
+             category={movie?.genre_info||''}
+             executeScroll={props.executeScroll}
+             movieDay={movie?.releaseDate|| new Date()}
+             movie={movie}
+           />
+         ))
+       ) : (
+         <p>Hiện tại không có phim nào được công chiếu</p>
+       )}
+     </div>
       {pages > 1 && dataShow.length > 0 ? (
         <div className='table__pagination'>
           {range.map((item, index) => (
@@ -69,6 +78,12 @@ function AllMovie(props) {
           ))}
         </div>
       ) : null}
+
+     </Fragment> 
+   ):<div className='empty-movie'>
+   <p>không tìm thấy phim</p>
+ </div>}   
+
     </div>
   );
 }

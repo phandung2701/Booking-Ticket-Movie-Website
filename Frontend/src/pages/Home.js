@@ -18,8 +18,9 @@ const Home = () => {
     setError(null);
   };
   const [isLoading, setIsLoading] = useState(false);
-
+  const [activeTab,setActiveTab] = useState(1)
   const [movieList, setMovieList] = useState([]);
+  const [movieCarousel,setMovieCarousel] = useState([])
 
   const fetchData = () => {
     setIsLoading(true);
@@ -35,6 +36,7 @@ const Home = () => {
           return;
         }
         setMovieList(res.data.films);
+        setMovieCarousel(res.data.films)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -46,6 +48,31 @@ const Home = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  const handleMovie = (type,tab)=>{
+    setIsLoading(true);
+    setActiveTab(tab)
+    axios({
+      method: 'post',
+      baseURL: process.env.REACT_APP_BACKEND_URL,
+      url: '/v1/movie/search',
+      data: {
+        type
+      },
+    })
+      .then((res) => {
+        if (res?.data?.films?.length === 0) {
+          setMovieList([]);
+          setIsLoading(false);
+          return;
+        }
+        setMovieList(res.data.films);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setError(err.response?.data?.error);
+      });
+  }
 
   return (
     <React.Fragment>
@@ -53,11 +80,10 @@ const Home = () => {
       {isLoading && <LoadingSpinner />}
       <div className='home-wrapper'>
         <Navbar tab={1} />
-        <Carousel movieList={movieList} />
+        <Carousel movieList={movieCarousel} />
 
-        {movieList.length > 0 ? (
-          <AllMovie movieList={movieList} limit={10} />
-        ) : null}
+        <AllMovie movieList={movieList} limit={10} handleMovie={handleMovie} activeTab={activeTab}/>
+     
 
         <Footer />
       </div>

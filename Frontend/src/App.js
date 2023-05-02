@@ -23,6 +23,7 @@ import ShowAllMovie from './pages/ShowAllMovie';
 import Cinema from './pages/Admin/Cinema';
 import ShowTime from './pages/Admin/ShowTime';
 import Screen from './pages/Admin/Screen';
+import TicketBooked from './pages/Admin/TicketBooked';
 
 // const Home = React.lazy(() => import('./pages/Home'));
 // const Movie = React.lazy(() => import('./pages/Movie'));
@@ -47,6 +48,8 @@ const App = () => {
         <Route path='cinema' element={<Cinema />} />
         <Route path='showTime' element={<ShowTime />} />
         <Route path='screen' element={<Screen />} />
+        <Route path='ticket' element={<TicketBooked />} />
+
       </Route>
     );
   } else {
@@ -59,6 +62,8 @@ const App = () => {
         <Route path='cinema' element={<Navigate to='/' />} />
         <Route path='showTime' element={<Navigate to='/' />} />
         <Route path='screen' element={<Navigate to='/' />} />
+        <Route path='ticket' element={<Navigate to='/'/>} />
+
       </Route>
     );
   }

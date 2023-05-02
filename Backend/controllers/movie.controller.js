@@ -13,7 +13,24 @@ const ProvinceModel = require("../models/Province.model");
  * @access  PUBLIC
  */
 exports.all = asyncHandler(async (req, res) => {
-  const movie = await Movie.find().sort({createdAt: -1});
+  const movie = await Movie.aggregate([
+    {
+      $lookup: {
+        from: "moviegenres",
+        localField: "genre",
+        foreignField: "sid",
+        as: "genre_info"
+      }
+    },
+    {
+      $lookup: {
+        from: "countries",
+        localField: "country",
+        foreignField: "sid",
+        as: "country_info"
+      }
+    },
+  ]).sort({createdAt: -1});
 
   res.status(200).json({
     success: true,
@@ -61,55 +78,44 @@ exports.searchName = asyncHandler(async (req, res) => {
  * @access  PUBLIC
  */
 exports.search = asyncHandler(async (req, res, next) => {
-  const movie = await Movie.find();
-  const { genre, country } = req.body;
-  function to_slug(str) {
-    str = str.toLowerCase();
-
-    str = str.replace(/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/g, "a");
-    str = str.replace(/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/g, "e");
-    str = str.replace(/(ì|í|ị|ỉ|ĩ)/g, "i");
-    str = str.replace(/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/g, "o");
-    str = str.replace(/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/g, "u");
-    str = str.replace(/(ỳ|ý|ỵ|ỷ|ỹ)/g, "y");
-    str = str.replace(/(đ)/g, "d");
-
-    str = str.replace(/([^0-9a-z-\s])/g, "");
-
-    str = str.replace(/(\s+)/g, "-");
-
-    str = str.replace(/^-+/g, "");
-
-    str = str.replace(/-+$/g, "");
-
-    return str;
+  const { genre, country,type } = req.body;
+  let movie;
+  let obj = {}
+  if(genre){
+    obj.genre = genre
+  } 
+  if(country){
+    obj.country = country
+  } 
+  if(type){
+    obj.releaseDate = {[`$${type}`]: new Date().toISOString()}
   }
-  function resData(genre, country, movie) {
-    if (genre !== "Tất cả" && country !== "Tất cả") {
-      return movie.filter(
-        (e) =>
-          e.country.toLowerCase().includes(country.toLowerCase()) &&
-          to_slug(e.genre).includes(to_slug(genre))
-      );
-    }
-    if (genre !== "Tất cả" && country === "Tất cả") {
-      return movie.filter((e) =>
-        to_slug(e.genre).includes(to_slug(genre))
-      );
-    }
-    if (genre === "Tất cả" && country !== "Tất cả") {
-      return movie.filter((e) =>
-        e?.country?.toLowerCase().includes(country?.toLowerCase())
-      );
-    }
-    if (genre === "Tất cả" && country === "Tất cả") {
-      return movie;
-    }
-  }
-  const movies = resData(genre, country, movie);
+  
+   movie = await Movie.aggregate([
+      {
+        $lookup: {
+          from: "moviegenres",
+          localField: "genre",
+          foreignField: "sid",
+          as: "genre_info"
+        }
+      },
+      {
+        $lookup: {
+          from: "countries",
+          localField: "country",
+          foreignField: "sid",
+          as: "country_info"
+        }
+      },
+      {
+        $match:obj
+      }
+    ]).sort({createdAt: -1});
+ 
   res.status(200).json({
     success: true,
-    films: movies,
+    films: movie,
   });
 });
 /**
@@ -126,6 +132,7 @@ exports.create = asyncHandler(async (req, res, next) => {
     category,
     movie_time,
     actor,
+    age,
     releaseDate,
     background,
     avatar,
@@ -139,6 +146,7 @@ exports.create = asyncHandler(async (req, res, next) => {
     country, 
     genre:category, 
     actor, 
+    age,
     releaseDate, 
     background, 
     avatar, 
@@ -160,7 +168,27 @@ exports.create = asyncHandler(async (req, res, next) => {
  */
 exports.detail = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  const movie = await Movie.find({sid:id});
+  const movie = await Movie.aggregate([
+    {
+      $lookup: {
+        from: "moviegenres",
+        localField: "genre",
+        foreignField: "sid",
+        as: "genre_info"
+      }
+    },
+    {
+      $lookup: {
+        from: "countries",
+        localField: "country",
+        foreignField: "sid",
+        as: "country_info"
+      }
+    },
+    {
+      $match:{sid:id}
+    }
+  ])
   
   if (!movie) {
     return next(new ErrorResponse("Không tìm thấy phim", 404));
@@ -175,7 +203,27 @@ exports.detail = asyncHandler(async (req, res, next) => {
 exports.detail_v2 = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   let date = new Date()
-  const movie = await Movie.find({sid : id});
+  const movie = await Movie.aggregate([
+    {
+      $lookup: {
+        from: "moviegenres",
+        localField: "genre",
+        foreignField: "sid",
+        as: "genre_info"
+      }
+    },
+    {
+      $lookup: {
+        from: "countries",
+        localField: "country",
+        foreignField: "sid",
+        as: "country_info"
+      }
+    },
+    {
+      $match:{sid:id}
+    }
+  ]);
   const cinema = await CinemaModel.find()
   const showTime = await ShowTimeModel.find({movieId:id,movieDay : {$gte: date.toISOString()}})
   const screen = await ScreenModel.find()

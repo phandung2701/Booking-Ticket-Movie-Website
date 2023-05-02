@@ -5,12 +5,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './MovieIsPlay.css';
-function compare_date(date1, date2) {
-  if (date1.valueOf() <= date2.valueOf()) {
-    return true;
-  }
-  return false;
-}
+
 
 function MovieIsPlay({ movieList, setStatus, executeScroll }) {
   const settings = {
@@ -31,10 +26,11 @@ function MovieIsPlay({ movieList, setStatus, executeScroll }) {
               movieId={item.sid || ''}
               poster={item.avatar}
               movieName={item.nameFilm}
-              category={item.category}
+              category={item.genre_info}
               setStatus={setStatus}
               executeScroll={executeScroll}
               movieDay={item.movieDay}
+              movie = {item}
             />
         )}
       </Slider>

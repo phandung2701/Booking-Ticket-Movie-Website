@@ -13,11 +13,11 @@ const {
 const { protect, hasAuthorization } = require('../middleware/auth');
 
 router.get('/', all);
-router.get('/:id', detail);
-router.post('/:id', detail_v2);
 router.post('/search', search);
-router.post('/search/name', searchName);
 router.post('/', protect, hasAuthorization('admin'), create);
 router.put('/:id', protect, hasAuthorization('admin'), update);
+router.get('/:id', detail);
+router.post('/:id', detail_v2);
+router.post('/search/name', searchName);
 
 module.exports = router;

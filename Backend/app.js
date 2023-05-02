@@ -18,7 +18,8 @@ const provinceRouter = require('./routes/province.route')
 const screen = require('./routes/screen.route')
 const showTime = require('./routes/showtime.route')
 const booking = require('./routes/booking.route')
-
+const movieGenre = require('./routes/movieGenre.route')
+const country = require('./routes/country.route')
 // process config
 const app = express();
 dotenv.config();
@@ -37,6 +38,8 @@ app.use('/api/v1/province', provinceRouter);
 app.use('/api/v1/screen', screen);
 app.use('/api/v1/showTime', showTime);
 app.use('/api/v1/booking', booking);
+app.use('/api/v1/movieGenre',movieGenre)
+app.use('/api/v1/country',country)
 
 
 app.use(errorHandler);

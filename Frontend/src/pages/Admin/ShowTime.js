@@ -6,6 +6,7 @@ import LoadingSpinner from '../../shared/components/LoadingSpinner';
 import axios from 'axios';
 import './Movies.css';
 import UpdateShowTime from '../../components/Admin/UpdateShowTime';
+import { formatDate } from '../../utils';
 function ShowTime() {
   const auth = useContext(AuthContext);
   const instance = axios.create({
@@ -77,10 +78,10 @@ function ShowTime() {
     <tr key={item._id}>
       <td>{index + 1}</td>
       <td>{item.sid}</td>
-      <td>{item.movieId}</td>
-      <td>{item.movieDay}</td>
+      <td>{item.movie[0].name}</td>
+      <td>{formatDate(item.movieDay)}</td>
       <td>{item.time}</td>
-      <td>{item.screenId}</td>
+      <td>{item.screen[0].name}</td>
 
       <td>
         <span className='update' onClick={() => handleUpdateShowTime(item)}>
